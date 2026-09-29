@@ -51,8 +51,12 @@ def main():
         if certs:
             credentialed_accounts += 1
             cert_counts.update(certs)
+            profile_image = row.get("profileImage") or ""
+            if not profile_image.startswith("https://"):
+                profile_image = ""
             holders.append({
                 "username": row.get("username") or f"User {row.get('userId', '')}",
+                "profile_image": profile_image,
                 "certificate_count": len(certs),
                 "certificates": sorted(certs),
                 "score": float(row.get("score") or 0),
@@ -65,6 +69,7 @@ def main():
         {
             "rank": rank,
             "username": holder["username"],
+            "profile_image": holder["profile_image"],
             "certificate_count": holder["certificate_count"],
             "certificates": holder["certificates"],
         }

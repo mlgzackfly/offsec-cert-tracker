@@ -58,6 +58,31 @@ function makeBadge(cert, url, className = 'badge-frame') {
   return frame;
 }
 
+function makeAvatar(holder) {
+  const frame = document.createElement('div');
+  frame.className = 'avatar-frame';
+  const fallback = document.createElement('span');
+  fallback.className = 'avatar-fallback';
+  fallback.textContent = (holder.username || 'OS').slice(0, 2).toUpperCase();
+  const url = holder.profile_image || '';
+  if (url.startsWith('https://')) {
+    const image = document.createElement('img');
+    image.src = url;
+    image.alt = `${holder.username} 的公開頭像`;
+    image.loading = 'lazy';
+    image.referrerPolicy = 'no-referrer';
+    image.addEventListener('error', () => {
+      image.hidden = true;
+      fallback.style.display = 'grid';
+    }, { once: true });
+    frame.append(image);
+  } else {
+    fallback.style.display = 'grid';
+  }
+  frame.append(fallback);
+  return frame;
+}
+
 function renderPodium(holders) {
   const podium = document.querySelector('#podium');
   podium.replaceChildren();
@@ -99,7 +124,7 @@ function renderPodium(holders) {
     const step = document.createElement('div');
     step.className = 'podium-step';
     step.textContent = `NO. 0${rank}`;
-    card.append(place, info, step);
+    card.append(place, makeAvatar(holder), info, step);
     podium.append(card);
   });
 }
