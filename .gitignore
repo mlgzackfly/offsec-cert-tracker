@@ -1,3 +1,4 @@
 .DS_Store
 __pycache__/
 offsec_tw_all_time_leaderboard.csv
+_site/

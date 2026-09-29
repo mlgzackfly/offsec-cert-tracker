@@ -1,6 +1,6 @@
 # 台灣 OffSec 證照觀測
 
-每日統計 OffSec 全球排行榜中，國家標記為台灣（`TW`）的帳號與其公開證照資料，並以 GitHub Pages 呈現最新持有人數、Badge 圖片及歷史趨勢。
+每日統計 OffSec 全球排行榜中，國家標記為台灣（`TW`）的帳號與其公開證照資料，並以 GitHub Pages 呈現最新持有人數、Badge 圖片及歷史趨勢。部署時會預先產生完整 HTML，讓搜尋引擎不必執行 JavaScript 就能讀到統計內容。
 
 ## 每日證照趨勢
 
@@ -45,7 +45,7 @@
 1. 從 OffSec Portal 取得台灣累計排行榜。
 2. 為每個帳號的每種證照最多計一次，彙總個人持有人數；另計算持有證照張數最多的前三個帳號。
 3. 更新 `data/snapshots.json` 中今天的快照並提交變更。
-4. 成功完成後觸發 GitHub Pages 重新部署。
+4. 成功完成後觸發 GitHub Pages 重新部署，產生含最新統計的 HTML、`sitemap.xml` 和 `robots.txt`。
 
 若 API 回傳 `hasNext: true`，表示 `limit=1000` 可能未涵蓋全部資料；更新程式會停止，不會把不完整結果寫成快照。
 
@@ -73,6 +73,7 @@ python3 scripts/update_data.py
 ├── data/snapshots.json    # 每日歷史資料
 ├── assets/certificate-trends.svg # README 每日趨勢圖
 ├── scripts/update_data.py # API 擷取與統計
+├── scripts/render_site.py # 產生預先渲染的 HTML 與 sitemap
 ├── app.js                 # 儀表板呈現與趨勢圖
 ├── index.html             # 網站頁面
 └── style.css              # 網站樣式

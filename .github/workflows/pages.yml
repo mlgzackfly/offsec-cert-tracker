@@ -32,7 +32,8 @@ jobs:
       - name: Prepare site artifact
         run: |
           mkdir -p _site/data
-          cp index.html style.css app.js _site/
+          python scripts/render_site.py --output _site/index.html
+          cp style.css app.js _site/
           cp data/snapshots.json _site/data/
           touch _site/.nojekyll
       - name: Upload site
