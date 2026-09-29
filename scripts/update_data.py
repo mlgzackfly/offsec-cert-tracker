@@ -37,6 +37,7 @@ def main():
     cert_counts = Counter()
     cert_badges = {}
     credentialed_accounts = 0
+    holders = []
     for row in rows:
         certs = set()
         for item in row.get("credentials") or []:
@@ -50,6 +51,25 @@ def main():
         if certs:
             credentialed_accounts += 1
             cert_counts.update(certs)
+            holders.append({
+                "username": row.get("username") or f"User {row.get('userId', '')}",
+                "certificate_count": len(certs),
+                "certificates": sorted(certs),
+                "score": float(row.get("score") or 0),
+            })
+
+    # Rank by number of distinct certificate names; use the leaderboard score
+    # to break ties, preserving the API order for any remaining ties.
+    holders.sort(key=lambda holder: (-holder["certificate_count"], -holder["score"]))
+    top_holders = [
+        {
+            "rank": rank,
+            "username": holder["username"],
+            "certificate_count": holder["certificate_count"],
+            "certificates": holder["certificates"],
+        }
+        for rank, holder in enumerate(holders[:3], start=1)
+    ]
 
     snapshot = {
         "date": datetime.now(ZoneInfo("Asia/Taipei")).date().isoformat(),
@@ -58,6 +78,7 @@ def main():
         "accounts_without_credentials": len(rows) - credentialed_accounts,
         "certificates": dict(sorted(cert_counts.items())),
         "certificate_badges": dict(sorted(cert_badges.items())),
+        "top_holders": top_holders,
         "source": API,
     }
 

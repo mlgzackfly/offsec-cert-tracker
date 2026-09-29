@@ -46,6 +46,69 @@
         "OSWE": "https://static.offsec.com/media/lms/credentials/OSWE_Acclaim_Badge.svg",
         "OSWP": "https://static.offsec.com/media/lms/credentials/OSWP_Acclaim_Badge.svg"
       },
+      "top_holders": [
+        {
+          "rank": 1,
+          "username": "crazymind",
+          "certificate_count": 16,
+          "certificates": [
+            "KLCP",
+            "OSCC-SEC",
+            "OSCC-SJD",
+            "OSCE3",
+            "OSCP",
+            "OSCP+",
+            "OSDA",
+            "OSED",
+            "OSEE",
+            "OSEP",
+            "OSIR",
+            "OSMR",
+            "OSTH",
+            "OSWA",
+            "OSWE",
+            "OSWP"
+          ]
+        },
+        {
+          "rank": 2,
+          "username": "jason3e7",
+          "certificate_count": 13,
+          "certificates": [
+            "KLCP",
+            "OSCC-SEC",
+            "OSCE3",
+            "OSCP",
+            "OSCP+",
+            "OSDA",
+            "OSED",
+            "OSEP",
+            "OSIR",
+            "OSTH",
+            "OSWA",
+            "OSWE",
+            "OSWP"
+          ]
+        },
+        {
+          "rank": 3,
+          "username": "axwl03",
+          "certificate_count": 11,
+          "certificates": [
+            "OSCC-SEC",
+            "OSCE3",
+            "OSCP",
+            "OSDA",
+            "OSED",
+            "OSEP",
+            "OSIR",
+            "OSTH",
+            "OSWA",
+            "OSWE",
+            "OSWP"
+          ]
+        }
+      ],
       "source": "https://portal.offsec.com/services/competitions/v1/leaderboard/global"
     }
   ]

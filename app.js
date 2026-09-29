@@ -35,7 +35,7 @@ function render() {
   const select = document.querySelector('#chart-cert');
   select.replaceChildren(...certs.map(cert => new Option(cert, cert)));
   select.addEventListener('change', drawChart);
-  renderPodium(certs, certificateBadges);
+  renderPodium(latest.top_holders || []);
   renderCertificateCards(certs, certificateBadges);
   drawChart();
 }
@@ -58,13 +58,12 @@ function makeBadge(cert, url, className = 'badge-frame') {
   return frame;
 }
 
-function renderPodium(certs, badges) {
+function renderPodium(holders) {
   const podium = document.querySelector('#podium');
   podium.replaceChildren();
-  const winners = certs.slice(0, 3);
-  const displayOrder = [winners[1], winners[0], winners[2]].filter(Boolean);
-  displayOrder.forEach(cert => {
-    const rank = winners.indexOf(cert) + 1;
+  const displayOrder = [holders[1], holders[0], holders[2]].filter(Boolean);
+  displayOrder.forEach((holder, index) => {
+    const rank = holder.rank || [2, 1, 3][index];
     const card = document.createElement('article');
     card.className = `podium-card rank-${rank}`;
     const place = document.createElement('div');
@@ -79,20 +78,28 @@ function renderPodium(certs, badges) {
     const info = document.createElement('div');
     info.className = 'podium-info';
     const title = document.createElement('h3');
-    title.textContent = cert;
+    title.textContent = holder.username || 'OffSec 使用者';
     const count = document.createElement('div');
     count.className = 'podium-count';
     const value = document.createElement('strong');
-    value.textContent = numberFormat.format(latest.certificates[cert]);
+    value.textContent = numberFormat.format(holder.certificate_count || 0);
     const unit = document.createElement('span');
-    unit.textContent = '人';
+    unit.textContent = '張證照';
     count.append(value, unit);
-    info.append(title, count);
+    const credentials = document.createElement('div');
+    credentials.className = 'holder-certs';
+    (holder.certificates || []).forEach(cert => {
+      const tag = document.createElement('span');
+      tag.className = 'holder-cert';
+      tag.textContent = cert;
+      credentials.append(tag);
+    });
+    info.append(title, count, credentials);
 
     const step = document.createElement('div');
     step.className = 'podium-step';
     step.textContent = `NO. 0${rank}`;
-    card.append(place, makeBadge(cert, badges[cert]), info, step);
+    card.append(place, info, step);
     podium.append(card);
   });
 }
