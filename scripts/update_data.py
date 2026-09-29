@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 """Fetch and append a daily snapshot of Taiwan OffSec leaderboard credentials."""
 import json
+import math
 import urllib.parse
 import urllib.request
 from collections import Counter
 from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
+from xml.sax.saxutils import escape
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_FILE = ROOT / "data" / "snapshots.json"
+CHART_FILE = ROOT / "assets" / "certificate-trends.svg"
 API = "https://portal.offsec.com/services/competitions/v1/leaderboard/global"
 
 
@@ -100,10 +103,86 @@ def main():
     history["timezone"] = "Asia/Taipei"
     history["snapshots"] = snapshots
     DATA_FILE.write_text(json.dumps(history, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    write_trend_chart(history)
     print(
         f"Saved {snapshot['date']}: {snapshot['total_accounts']} accounts, "
         f"{credentialed_accounts} with credentials, {len(cert_counts)} certificate types."
     )
+
+
+def write_trend_chart(history):
+    snapshots = history.get("snapshots", [])
+    if not snapshots:
+        return
+
+    latest_counts = snapshots[-1].get("certificates", {})
+    certificates = sorted(latest_counts, key=lambda cert: (-latest_counts[cert], cert))[:5]
+    colors = ["#e86c43", "#28715c", "#527da5", "#bd8b27", "#885e91"]
+    width, height = 1000, 520
+    left, right, top, bottom = 78, 36, 140, 78
+    chart_width = width - left - right
+    chart_height = height - top - bottom
+    max_value = max((snapshot.get("certificates", {}).get(cert, 0)
+                     for snapshot in snapshots for cert in certificates), default=1)
+    scale_top = max(5, math.ceil(max_value / 50) * 50)
+
+    def x(index):
+        if len(snapshots) < 2:
+            return left + chart_width / 2
+        return left + index * chart_width / (len(snapshots) - 1)
+
+    def y(value):
+        return top + chart_height * (1 - value / scale_top)
+
+    parts = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">',
+        '<title id="title">Taiwan OffSec certificate holder trends</title>',
+        '<desc id="desc">Daily counts for the five certificates with the most holders in the latest snapshot.</desc>',
+        '<rect width="100%" height="100%" rx="12" fill="#fffefa"/>',
+        '<text x="38" y="47" fill="#182d32" font-family="Arial,sans-serif" font-size="24" font-weight="700">Taiwan OffSec · Certificate holders</text>',
+        f'<text x="38" y="74" fill="#737c77" font-family="Arial,sans-serif" font-size="13">Top certificates in the latest snapshot · {len(snapshots)} daily snapshot(s)</text>',
+    ]
+
+    legend_y = 111
+    legend_step = 185
+    for index, cert in enumerate(certificates):
+        legend_x = 40 + index * legend_step
+        parts.append(f'<circle cx="{legend_x + 6}" cy="{legend_y - 4}" r="5" fill="{colors[index]}"/>')
+        parts.append(f'<text x="{legend_x + 18}" y="{legend_y}" fill="#355057" font-family="Arial,sans-serif" font-size="13">{escape(cert)}</text>')
+
+    for step in range(5):
+        value = scale_top * step / 4
+        y_pos = y(value)
+        parts.append(f'<line x1="{left}" y1="{y_pos:.1f}" x2="{width - right}" y2="{y_pos:.1f}" stroke="#e8e5dc" stroke-width="1"/>')
+        parts.append(f'<text x="{left - 12}" y="{y_pos + 4:.1f}" text-anchor="end" fill="#8b928b" font-family="Arial,sans-serif" font-size="11">{round(value)}</text>')
+
+    for index, cert in enumerate(certificates):
+        points = [
+            (x(point_index), y(snapshot.get("certificates", {}).get(cert, 0)))
+            for point_index, snapshot in enumerate(snapshots)
+        ]
+        if len(points) > 1:
+            path = " ".join(f"{'M' if point_index == 0 else 'L'} {point_x:.1f} {point_y:.1f}"
+                            for point_index, (point_x, point_y) in enumerate(points))
+            parts.append(f'<path d="{path}" fill="none" stroke="{colors[index]}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>')
+        for point_x, point_y in points:
+            parts.append(f'<circle cx="{point_x:.1f}" cy="{point_y:.1f}" r="4.5" fill="{colors[index]}" stroke="#fffefa" stroke-width="2"/>')
+
+    date_indices = sorted({0, len(snapshots) // 2, len(snapshots) - 1})
+    for index in date_indices:
+        date = escape(snapshots[index].get("date", ""))
+        anchor = "start" if index == 0 else "end" if index == len(snapshots) - 1 else "middle"
+        parts.append(f'<text x="{x(index):.1f}" y="{height - 42}" text-anchor="{anchor}" fill="#8b928b" font-family="Arial,sans-serif" font-size="11">{date}</text>')
+
+    if len(snapshots) == 1:
+        note = "Trend tracking has started. More daily snapshots will build the lines over time."
+        parts.append(f'<text x="{width / 2}" y="{height - 12}" text-anchor="middle" fill="#8b928b" font-family="Arial,sans-serif" font-size="11">{note}</text>')
+    else:
+        parts.append(f'<text x="{width / 2}" y="{height - 12}" text-anchor="middle" fill="#8b928b" font-family="Arial,sans-serif" font-size="11">Snapshot dates use Asia/Taipei · Source: OffSec public leaderboard</text>')
+    parts.append('</svg>')
+
+    CHART_FILE.parent.mkdir(parents=True, exist_ok=True)
+    CHART_FILE.write_text("\n".join(parts) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":

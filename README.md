@@ -2,6 +2,14 @@
 
 每日統計 OffSec 全球排行榜中，國家標記為台灣（`TW`）的帳號與其公開證照資料，並以 GitHub Pages 呈現最新持有人數、Badge 圖片及歷史趨勢。
 
+## 每日證照趨勢
+
+下圖由每日更新流程重新產生，呈現最新快照中持有人數最多的五種證照：
+
+![台灣 OffSec 證照持有人數每日趨勢](assets/certificate-trends.svg)
+
+目前歷史資料從 **2026-09-29** 開始累積；快照增加後，圖表會逐日連成趨勢線。
+
 ## GitHub Repository Description
 
 > 每日追蹤 OffSec 全球排行榜中台灣帳號的公開證照數量，保存歷史快照並以 GitHub Pages 呈現趨勢。
@@ -17,7 +25,7 @@
 
 ## 資料保存方式
 
-`data/snapshots.json` 是歷史資料來源。每筆快照包含日期、排行榜帳號總數、至少擁有一張證照的帳號數、各證照持有人數、OffSec Badge 圖片網址，以及資料來源。每日 GitHub Actions 工作流程更新 JSON 並提交到 repository；GitHub Pages 隨後重新部署網站，將最新快照一併發布。
+`data/snapshots.json` 是歷史資料來源。每筆快照包含日期、排行榜帳號總數、至少擁有一張證照的帳號數、各證照持有人數、OffSec Badge 圖片網址，以及資料來源。每日 GitHub Actions 工作流程更新 JSON，並依歷史快照重繪 `assets/certificate-trends.svg`，再一併提交；GitHub Pages 隨後重新部署網站。
 
 第一次執行會建立第一筆快照。本專案已在 **2026-09-29（台北時間）** 建立起始快照；之後每次成功執行會累積一個新的日期，形成趨勢資料。
 
@@ -63,6 +71,7 @@ python3 scripts/update_data.py
 │   ├── daily-update.yml   # 每日抓取與提交快照
 │   └── pages.yml          # GitHub Pages 部署
 ├── data/snapshots.json    # 每日歷史資料
+├── assets/certificate-trends.svg # README 每日趨勢圖
 ├── scripts/update_data.py # API 擷取與統計
 ├── app.js                 # 儀表板呈現與趨勢圖
 ├── index.html             # 網站頁面
