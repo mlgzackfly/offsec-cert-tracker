@@ -1,0 +1,32 @@
+{
+  "timezone": "Asia/Taipei",
+  "snapshots": [
+    {
+      "date": "2026-09-29",
+      "total_accounts": 987,
+      "accounts_with_credentials": 340,
+      "accounts_without_credentials": 647,
+      "certificates": {
+        "KLCP": 9,
+        "OSAI": 2,
+        "OSAI+": 2,
+        "OSCC-SEC": 20,
+        "OSCC-SJD": 3,
+        "OSCE3": 20,
+        "OSCP": 267,
+        "OSCP+": 121,
+        "OSDA": 41,
+        "OSED": 31,
+        "OSEE": 4,
+        "OSEP": 81,
+        "OSIR": 15,
+        "OSMR": 1,
+        "OSTH": 20,
+        "OSWA": 30,
+        "OSWE": 69,
+        "OSWP": 31
+      },
+      "source": "https://portal.offsec.com/services/competitions/v1/leaderboard/global"
+    }
+  ]
+}

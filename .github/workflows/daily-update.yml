@@ -1,0 +1,33 @@
+name: Update daily leaderboard snapshot
+
+on:
+  schedule:
+    - cron: "20 0 * * *" # 08:20 Asia/Taipei
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-snapshot
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch and store snapshot
+        run: python scripts/update_data.py
+      - name: Commit history
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/snapshots.json
+          git diff --cached --quiet || git commit -m "Update Taiwan certificate snapshot"
+          git push
