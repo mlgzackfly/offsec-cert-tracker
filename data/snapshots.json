@@ -3,9 +3,9 @@
   "snapshots": [
     {
       "date": "2026-09-29",
-      "total_accounts": 987,
+      "total_accounts": 988,
       "accounts_with_credentials": 340,
-      "accounts_without_credentials": 647,
+      "accounts_without_credentials": 648,
       "certificates": {
         "KLCP": 9,
         "OSAI": 2,
