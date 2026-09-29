@@ -35,8 +35,66 @@ function render() {
   const select = document.querySelector('#chart-cert');
   select.replaceChildren(...certs.map(cert => new Option(cert, cert)));
   select.addEventListener('change', drawChart);
+  renderPodium(certs, certificateBadges);
   renderCertificateCards(certs, certificateBadges);
   drawChart();
+}
+
+function makeBadge(cert, url, className = 'badge-frame') {
+  const frame = document.createElement('div');
+  frame.className = className;
+  const image = document.createElement('img');
+  image.src = url || fallbackBadgeUrl(cert);
+  image.alt = `${cert} Badge`;
+  image.loading = 'lazy';
+  const fallback = document.createElement('span');
+  fallback.className = 'badge-fallback';
+  fallback.textContent = cert.slice(0, 1);
+  image.addEventListener('error', () => {
+    image.hidden = true;
+    fallback.style.display = 'grid';
+  }, { once: true });
+  frame.append(image, fallback);
+  return frame;
+}
+
+function renderPodium(certs, badges) {
+  const podium = document.querySelector('#podium');
+  podium.replaceChildren();
+  const winners = certs.slice(0, 3);
+  const displayOrder = [winners[1], winners[0], winners[2]].filter(Boolean);
+  displayOrder.forEach(cert => {
+    const rank = winners.indexOf(cert) + 1;
+    const card = document.createElement('article');
+    card.className = `podium-card rank-${rank}`;
+    const place = document.createElement('div');
+    place.className = 'podium-place';
+    const medal = document.createElement('span');
+    medal.className = 'podium-medal';
+    medal.textContent = String(rank);
+    const placeText = document.createElement('span');
+    placeText.textContent = ['冠軍', '亞軍', '季軍'][rank - 1];
+    place.append(medal, placeText);
+
+    const info = document.createElement('div');
+    info.className = 'podium-info';
+    const title = document.createElement('h3');
+    title.textContent = cert;
+    const count = document.createElement('div');
+    count.className = 'podium-count';
+    const value = document.createElement('strong');
+    value.textContent = numberFormat.format(latest.certificates[cert]);
+    const unit = document.createElement('span');
+    unit.textContent = '人';
+    count.append(value, unit);
+    info.append(title, count);
+
+    const step = document.createElement('div');
+    step.className = 'podium-step';
+    step.textContent = `NO. 0${rank}`;
+    card.append(place, makeBadge(cert, badges[cert]), info, step);
+    podium.append(card);
+  });
 }
 
 function renderCertificateCards(certs, badges) {
@@ -47,20 +105,7 @@ function renderCertificateCards(certs, badges) {
     const card = document.createElement('article');
     card.className = 'cert-card';
 
-    const badgeFrame = document.createElement('div');
-    badgeFrame.className = 'badge-frame';
-    const badge = document.createElement('img');
-    badge.src = badges[cert] || fallbackBadgeUrl(cert);
-    badge.alt = `${cert} Badge`;
-    badge.loading = 'lazy';
-    const fallback = document.createElement('span');
-    fallback.className = 'badge-fallback';
-    fallback.textContent = cert.slice(0, 1);
-    badge.addEventListener('error', () => {
-      badge.hidden = true;
-      fallback.style.display = 'grid';
-    }, { once: true });
-    badgeFrame.append(badge, fallback);
+    const badgeFrame = makeBadge(cert, badges[cert]);
 
     const info = document.createElement('div');
     info.className = 'cert-info';
@@ -74,7 +119,7 @@ function renderCertificateCards(certs, badges) {
     const value = document.createElement('strong');
     value.textContent = numberFormat.format(latest.certificates[cert]);
     const label = document.createElement('span');
-    label.textContent = '個帳號';
+    label.textContent = '人';
     count.append(value, label);
     info.append(kicker, title, count);
     card.append(badgeFrame, info);
@@ -100,7 +145,7 @@ function drawChart() {
     count: (snapshot.certificates || {})[cert] || 0
   }));
   const current = values[values.length - 1];
-  document.querySelector('#chart-current').textContent = `${numberFormat.format(current?.count || 0)} 個帳號`;
+  document.querySelector('#chart-current').textContent = `${numberFormat.format(current?.count || 0)} 人`;
 
   const width = 900, height = 300, left = 50, right = 16, top = 18, bottom = 34;
   const maximum = Math.max(...values.map(point => point.count), 1);

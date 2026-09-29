@@ -62,6 +62,14 @@
       </div>
     </section>
 
+    <section class="podium-section" aria-labelledby="podium-title">
+      <div class="section-intro">
+        <div><p class="eyebrow">證照排行榜</p><h2 id="podium-title">持有人數前三名</h2></div>
+        <p>依公開排行榜中列出的證照人數排序。</p>
+      </div>
+      <div id="podium" class="podium" aria-live="polite"></div>
+    </section>
+
     <section class="cert-section" aria-labelledby="cert-title">
       <div class="section-intro cert-intro">
         <div><p class="eyebrow">證照圖鑑</p><h2 id="cert-title">台灣帳號公開的證照</h2></div>
@@ -72,7 +80,7 @@
 
     <section class="data-note" aria-label="資料說明">
       <div class="note-mark">i</div>
-      <div><h2>資料怎麼統計</h2><p>數字來自 OffSec Portal 公開排行榜 API。每個帳號在同一證照只計一次；同一帳號可同時擁有多張證照。統計代表排行榜中公開列出的資料，不等同 OffSec 官方完整持證人數。帳號狀態、國家設定或 API 變動都可能影響結果。</p>
+      <div><h2>資料怎麼統計</h2><p>數字來自 OffSec Portal 公開排行榜 API。證照人數以排行榜帳號為計數單位，同一帳號在同一證照只計一次；網站以「人」呈現，並非 OffSec 官方去重後的個人名冊。同一帳號可同時擁有多張證照。帳號狀態、國家設定或 API 變動都可能影響結果。</p>
       <a href="https://portal.offsec.com/services/competitions/v1/leaderboard/global?limit=1000&amp;offset=0&amp;timeFilter=ALL_TIME&amp;countryCode=TW" target="_blank" rel="noreferrer">查看 OffSec Portal 資料來源 ↗</a></div>
     </section>
   </main>
