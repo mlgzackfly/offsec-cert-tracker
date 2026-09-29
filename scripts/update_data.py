@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Fetch and append a daily snapshot of Taiwan OffSec leaderboard credentials."""
 import json
-import os
 import urllib.parse
 import urllib.request
 from collections import Counter
@@ -36,13 +35,18 @@ def main():
         raise RuntimeError("API indicates more pages; refusing to save a partial snapshot.")
 
     cert_counts = Counter()
+    cert_badges = {}
     credentialed_accounts = 0
     for row in rows:
-        certs = {
-            item.get("shortName")
-            for item in (row.get("credentials") or [])
-            if item.get("type") == "certificate" and item.get("shortName")
-        }
+        certs = set()
+        for item in row.get("credentials") or []:
+            short_name = item.get("shortName")
+            if item.get("type") != "certificate" or not short_name:
+                continue
+            certs.add(short_name)
+            image_url = item.get("image")
+            if image_url and short_name not in cert_badges:
+                cert_badges[short_name] = image_url
         if certs:
             credentialed_accounts += 1
             cert_counts.update(certs)
@@ -53,6 +57,7 @@ def main():
         "accounts_with_credentials": credentialed_accounts,
         "accounts_without_credentials": len(rows) - credentialed_accounts,
         "certificates": dict(sorted(cert_counts.items())),
+        "certificate_badges": dict(sorted(cert_badges.items())),
         "source": API,
     }
 

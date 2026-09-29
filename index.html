@@ -3,48 +3,81 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101820">
-  <title>台灣 OffSec 證照觀測</title>
+  <meta name="theme-color" content="#182d32">
+  <meta name="description" content="每日追蹤 OffSec 全球排行榜中台灣帳號的公開證照數量與變化。">
+  <title>台灣 OffSec 證照觀察</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="./"><span class="brand-mark">O</span> OFFSEC / TAIWAN</a>
-    <span class="live-label"><i></i> 每日更新</span>
+    <a class="brand" href="./" aria-label="台灣 OffSec 證照觀察首頁">
+      <span class="brand-mark">O</span>
+      <span>OFFSEC <b>/</b> TAIWAN</span>
+    </a>
+    <div class="topbar-meta"><span class="live-dot"></span><span>每日更新</span><span class="topbar-divider"></span><span>資料公開觀察</span></div>
   </header>
+
   <main>
-    <section class="intro">
-      <p class="eyebrow">COMMUNITY DATA · TAIWAN</p>
-      <h1>台灣 OffSec<br><em>證照觀測</em></h1>
-      <p class="lede">追蹤 OffSec 全球排行榜中，國家標記為台灣的帳號及其公開證照資料。</p>
-      <p class="updated" id="updated">正在載入最新快照…</p>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">台灣社群 · 公開排行榜資料</p>
+        <h1>台灣 OffSec<br><span>證照觀察</span></h1>
+        <p class="hero-lede">看看台灣 OffSec 帳號公開了哪些證照，還有持有人數如何隨時間變化。</p>
+      </div>
+      <aside class="hero-stamp" aria-label="資料更新資訊">
+        <span class="stamp-label">最新資料</span>
+        <strong id="snapshot-date">—</strong>
+        <span class="stamp-caption">台北時間 · 每日更新</span>
+        <span class="stamp-index">TW <i>／</i> ALL TIME</span>
+      </aside>
+      <div class="hero-bottom"><span>OFFSEC COMMUNITY INDEX</span><span id="snapshot-count">載入歷史資料…</span></div>
     </section>
 
-    <section class="summary" aria-label="最新統計">
-      <article class="summary-card primary"><span>排行榜帳號</span><strong id="total-count">—</strong><small>COUNTRY CODE: TW</small></article>
-      <article class="summary-card"><span>列出至少一張證照</span><strong id="credentialed-count">—</strong><small id="credentialed-share">—</small></article>
-      <article class="summary-card"><span>列出證照種類</span><strong id="cert-type-count">—</strong><small>不同證照項目</small></article>
+    <section class="metrics" aria-label="台灣 OffSec 帳號統計">
+      <article class="metric metric-dark">
+        <div class="metric-label"><span class="metric-number">01</span><h2>OffSec 台灣帳號總數</h2></div>
+        <strong id="total-count">—</strong>
+        <p>OffSec 全球排行榜中，國家標記為 TW 的帳號</p>
+      </article>
+      <article class="metric metric-accent">
+        <div class="metric-label"><span class="metric-number">02</span><h2>至少擁有一張證照</h2></div>
+        <strong id="credentialed-count">—</strong>
+        <p><span id="credentialed-share">—</span> 的台灣排行榜帳號有公開證照</p>
+      </article>
     </section>
 
-    <section class="content-grid">
-      <section class="panel chart-panel">
-        <div class="section-heading"><div><p class="eyebrow">HISTORY</p><h2>持有人數變化</h2></div><label class="select-wrap">證照<select id="chart-cert"></select></label></div>
-        <div class="chart-wrap"><svg id="trend-chart" role="img" aria-label="證照持有人數歷史趨勢圖" viewBox="0 0 800 300" preserveAspectRatio="none"></svg></div>
+    <section class="trend-section" aria-labelledby="trend-title">
+      <div class="section-intro">
+        <div><p class="eyebrow">每日快照</p><h2 id="trend-title">持有人數趨勢</h2></div>
+        <p>從本專案開始追蹤後，查看各證照持有人數的每日變化。</p>
+      </div>
+      <div class="trend-card">
+        <div class="trend-toolbar">
+          <label for="chart-cert">查看證照</label>
+          <select id="chart-cert" aria-label="選擇要查看趨勢的證照"></select>
+          <span id="chart-current" class="trend-current">—</span>
+        </div>
+        <div class="chart-wrap"><svg id="trend-chart" role="img" aria-label="所選證照的持有人數趨勢圖" viewBox="0 0 900 300" preserveAspectRatio="none"></svg></div>
         <div class="chart-foot"><span id="chart-first">開始追蹤</span><span id="chart-latest">最新</span></div>
-      </section>
-      <section class="panel latest-panel">
-        <div class="section-heading"><div><p class="eyebrow">LATEST SNAPSHOT</p><h2>證照持有人數</h2></div><span class="unit">帳號</span></div>
-        <div id="cert-list" class="cert-list"></div>
-      </section>
+      </div>
     </section>
-    <section class="panel notes">
-      <p class="eyebrow">ABOUT THE DATA</p>
-      <p>數字來自 OffSec Portal 公開排行榜 API，統計各帳號 <code>credentials</code> 欄位中列出的證照。每個帳號只在同一證照項目計一次；帳號可以同時列出多張證照。</p>
-      <p>這是排行榜資料的每日快照，不代表 OffSec 官方完整持證人數。若帳號退出排行榜、國家設定或 API 欄位改變，統計也可能變動。歷史資料自本專案首次成功執行起累積。</p>
-      <a href="https://portal.offsec.com/services/competitions/v1/leaderboard/global?limit=1000&amp;offset=0&amp;timeFilter=ALL_TIME&amp;countryCode=TW" target="_blank" rel="noreferrer">資料來源：OffSec Portal ↗</a>
+
+    <section class="cert-section" aria-labelledby="cert-title">
+      <div class="section-intro cert-intro">
+        <div><p class="eyebrow">證照圖鑑</p><h2 id="cert-title">台灣帳號公開的證照</h2></div>
+        <p><span id="cert-type-count">—</span> 種證照 · 每張卡片列出 Badge 與公開持有人數</p>
+      </div>
+      <div id="cert-grid" class="cert-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="data-note" aria-label="資料說明">
+      <div class="note-mark">i</div>
+      <div><h2>資料怎麼統計</h2><p>數字來自 OffSec Portal 公開排行榜 API。每個帳號在同一證照只計一次；同一帳號可同時擁有多張證照。統計代表排行榜中公開列出的資料，不等同 OffSec 官方完整持證人數。帳號狀態、國家設定或 API 變動都可能影響結果。</p>
+      <a href="https://portal.offsec.com/services/competitions/v1/leaderboard/global?limit=1000&amp;offset=0&amp;timeFilter=ALL_TIME&amp;countryCode=TW" target="_blank" rel="noreferrer">查看 OffSec Portal 資料來源 ↗</a></div>
     </section>
   </main>
-  <footer><span>COMMUNITY TRACKER</span><span>資料時間以台北時區記錄</span></footer>
+
+  <footer><a class="footer-brand" href="./">OFFSEC / TAIWAN</a><span>公開資料每日觀察 <i>·</i> 時間採台北時區</span></footer>
   <script src="app.js" defer></script>
 </body>
 </html>
