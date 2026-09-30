@@ -32,9 +32,9 @@
   <text x="75" y="583" fill="#737c77" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="2">TAIWAN OFFSEC CERTIFICATE TRACKER</text>
 
   <text x="770" y="125" fill="#c7d7c3" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="2">CERTIFICATION INDEX</text>
-  <image href="offsec-oscp-badge.svg" x="806" y="135" width="260" height="300" preserveAspectRatio="xMidYMid meet"/>
-  <rect x="783" y="455" width="281" height="48" rx="8" fill="#f4f1e9"/>
-  <circle cx="808" cy="479" r="7" fill="#e86c43"/>
-  <text x="827" y="484" fill="#182d32" font-family="Arial,'Noto Sans TC','PingFang TC',sans-serif" font-size="14" font-weight="700">持有人數・每日更新</text>
-  <text x="923" y="538" text-anchor="middle" fill="#b7c8bd" font-family="Arial,sans-serif" font-size="10" letter-spacing="2">OFFICIAL OFFSEC OSCP BADGE</text>
+  <rect x="773" y="224" width="300" height="100" rx="14" fill="#f4f1e9"/>
+  <image href="offsec-logo.png" x="783" y="235" width="280" height="78" preserveAspectRatio="xMidYMid meet"/>
+  <text x="923" y="390" text-anchor="middle" fill="#d6e4d0" font-family="Arial,'Noto Sans TC','PingFang TC',sans-serif" font-size="20" font-weight="700">OffSec 台灣證照統計</text>
+  <path d="M831 423h184" stroke="#71887d" stroke-width="1"/>
+  <text x="923" y="465" text-anchor="middle" fill="#b7c8bd" font-family="Arial,sans-serif" font-size="10" letter-spacing="2">CERTIFICATIONS · PEOPLE · DAILY</text>
 </svg>
