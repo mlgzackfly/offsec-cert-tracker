@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#24434a"/>
+      <stop offset="1" stop-color="#14282d"/>
+    </linearGradient>
+    <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#ffffff" opacity=".12"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#f4f1e9"/>
+  <path d="M0 0h1200v18H0z" fill="#e86c43"/>
+  <circle cx="1130" cy="22" r="260" fill="#e7e4da" opacity=".64"/>
+  <path d="M720 74h400a32 32 0 0 1 32 32v418a32 32 0 0 1-32 32H720z" fill="url(#card)"/>
+  <path d="M720 74h400a32 32 0 0 1 32 32v418a32 32 0 0 1-32 32H720z" fill="url(#dots)"/>
+
+  <circle cx="79" cy="78" r="21" fill="#d6e4d0"/>
+  <text x="79" y="86" text-anchor="middle" fill="#182d32" font-family="Arial,sans-serif" font-size="23" font-weight="700">O</text>
+  <text x="116" y="83" fill="#182d32" font-family="Arial,sans-serif" font-size="16" font-weight="700" letter-spacing="3">OFFSEC <tspan fill="#e86c43">/</tspan> TAIWAN</text>
+  <rect x="489" y="60" width="153" height="34" rx="17" fill="#e8e4d8"/>
+  <circle cx="508" cy="77" r="4" fill="#e86c43"/>
+  <text x="521" y="81" fill="#586760" font-family="Arial,sans-serif" font-size="10" font-weight="700" letter-spacing="1.5">COMMUNITY DATA</text>
+
+  <text x="72" y="183" fill="#a94e31" font-family="Arial,'Noto Sans TC','PingFang TC',sans-serif" font-size="15" font-weight="700" letter-spacing="2">台灣社群・公開排行榜資料</text>
+  <text x="69" y="282" fill="#182d32" font-family="Arial,'Noto Sans TC','PingFang TC',sans-serif" font-size="76" font-weight="800" letter-spacing="-4">台灣 OffSec</text>
+  <text x="69" y="378" fill="#e86c43" font-family="Arial,'Noto Sans TC','PingFang TC',sans-serif" font-size="76" font-weight="800" letter-spacing="-4">證照觀察</text>
+  <text x="75" y="429" fill="#56666a" font-family="Arial,'Noto Sans TC','PingFang TC',sans-serif" font-size="20">每日追蹤公開證照、持有人數與持證照排行</text>
+
+  <g font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="1">
+    <rect x="74" y="481" width="83" height="34" rx="17" fill="#182d32"/><text x="115" y="503" text-anchor="middle" fill="#f4f1e9">OSCP</text>
+    <rect x="167" y="481" width="91" height="34" rx="17" fill="#d6e4d0"/><text x="212" y="503" text-anchor="middle" fill="#182d32">OSCP+</text>
+    <rect x="268" y="481" width="83" height="34" rx="17" fill="#e8c3ad"/><text x="309" y="503" text-anchor="middle" fill="#623b2d">OSEP</text>
+    <rect x="361" y="481" width="83" height="34" rx="17" fill="#e8e4d8"/><text x="402" y="503" text-anchor="middle" fill="#355057">OSWE</text>
+  </g>
+  <path d="M74 558h568" stroke="#d9d7cd" stroke-width="1"/>
+  <text x="75" y="583" fill="#737c77" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="2">TAIWAN OFFSEC CERTIFICATE TRACKER</text>
+
+  <text x="770" y="125" fill="#c7d7c3" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="2">CERTIFICATION INDEX</text>
+  <circle cx="923" cy="301" r="125" fill="none" stroke="#71887d" stroke-width="1" opacity=".5"/>
+  <circle cx="923" cy="301" r="104" fill="#d6e4d0"/>
+  <circle cx="923" cy="301" r="91" fill="#f4f1e9"/>
+  <path d="M923 219l56 20v43c0 45-24 76-56 96-32-20-56-51-56-96v-43z" fill="#182d32"/>
+  <path d="M923 232l44 16v34c0 34-17 59-44 78-27-19-44-44-44-78v-34z" fill="none" stroke="#e86c43" stroke-width="3"/>
+  <text x="923" y="295" text-anchor="middle" fill="#f4f1e9" font-family="Arial,sans-serif" font-size="20" font-weight="700" letter-spacing="1">OFFSEC</text>
+  <text x="923" y="322" text-anchor="middle" fill="#d6e4d0" font-family="Arial,sans-serif" font-size="13" font-weight="700" letter-spacing="3">CERTS</text>
+  <circle cx="1050" cy="203" r="35" fill="#e86c43"/>
+  <path d="M1050 181l6.5 13.1 14.5 2.1-10.5 10.2 2.5 14.4-13-6.8-13 6.8 2.5-14.4-10.5-10.2 14.5-2.1z" fill="#fff8ec"/>
+  <rect x="783" y="455" width="281" height="48" rx="8" fill="#f4f1e9"/>
+  <circle cx="808" cy="479" r="7" fill="#e86c43"/>
+  <text x="827" y="484" fill="#182d32" font-family="Arial,'Noto Sans TC','PingFang TC',sans-serif" font-size="14" font-weight="700">持有人數・每日更新</text>
+  <text x="923" y="538" text-anchor="middle" fill="#b7c8bd" font-family="Arial,sans-serif" font-size="10" letter-spacing="2">OSCP · OSEP · OSWE · AND MORE</text>
+</svg>

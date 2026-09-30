@@ -34,6 +34,7 @@ jobs:
           mkdir -p _site/data
           python scripts/render_site.py --output _site/index.html
           cp style.css app.js _site/
+          cp -R assets _site/assets
           cp data/snapshots.json _site/data/
           cp google4d70fe6121c24cdc.html _site/
           touch _site/.nojekyll
