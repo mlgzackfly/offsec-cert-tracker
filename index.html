@@ -64,19 +64,6 @@
       </article>
     </section>
 
-    <section class="daily-compare" aria-labelledby="daily-compare-title">
-      <div class="section-intro">
-        <div><p class="eyebrow">每日變化</p><h2 id="daily-compare-title">和前一天相比</h2></div>
-        <p>查看排行榜帳號與各證照持有人數的增減；證照人數以排行榜帳號計算。</p>
-      </div>
-      <div class="delta-card">
-        <p id="delta-period" class="delta-period">載入比較資料…</p>
-        <div class="delta-detail-heading"><h3>各證照持有人數變化</h3><span id="delta-change-count">—</span></div>
-        <ul id="delta-cert-list" class="delta-cert-list" aria-live="polite"></ul>
-        <p id="delta-empty" class="delta-empty" hidden></p>
-      </div>
-    </section>
-
     <section class="trend-section" aria-labelledby="trend-title">
       <div class="section-intro">
         <div><p class="eyebrow">每日快照</p><h2 id="trend-title">持有人數趨勢</h2></div>
@@ -104,7 +91,7 @@
     <section class="cert-section" aria-labelledby="cert-title">
       <div class="section-intro cert-intro">
         <div><p class="eyebrow">證照圖鑑</p><h2 id="cert-title">台灣帳號公開的證照</h2></div>
-        <p><span id="cert-type-count">—</span> 種證照 · 每張卡片列出 Badge 與公開持有人數</p>
+        <p><span id="cert-type-count">—</span> 種證照 · 紅色標記為 <span id="cert-compare-period">較前一日</span> 人數變化</p>
       </div>
       <div id="cert-grid" class="cert-grid" aria-live="polite"></div>
     </section>

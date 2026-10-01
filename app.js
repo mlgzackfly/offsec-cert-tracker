@@ -26,6 +26,7 @@ function render() {
   document.querySelector('#snapshot-count').textContent = `已累積 ${numberFormat.format(snapshots.length)} 日快照`;
   document.querySelector('#total-count').textContent = numberFormat.format(latest.total_accounts || 0);
   document.querySelector('#credentialed-count').textContent = numberFormat.format(latest.accounts_with_credentials || 0);
+  renderMetricDeltas();
   const share = latest.total_accounts
     ? ((latest.accounts_with_credentials / latest.total_accounts) * 100).toFixed(1)
     : '0.0';
@@ -35,9 +36,8 @@ function render() {
   const select = document.querySelector('#chart-cert');
   select.replaceChildren(...certs.map(cert => new Option(cert, cert)));
   select.addEventListener('change', drawChart);
-  renderDailyCompare();
   renderPodium(latest.top_holders || []);
-  renderCertificateCards(certs, certificateBadges);
+  renderCertificateCards(certs, certificateBadges, snapshots.at(-2));
   drawChart();
 }
 
@@ -51,61 +51,28 @@ function formatStockDelta(value) {
   return '— 0';
 }
 
-function renderDailyCompare() {
+function renderMetricDeltas() {
   const previous = snapshots.at(-2);
-  const period = document.querySelector('#delta-period');
   const accountDelta = document.querySelector('#delta-accounts');
   const credentialedDelta = document.querySelector('#delta-credentialed');
-  const changeCount = document.querySelector('#delta-change-count');
-  const list = document.querySelector('#delta-cert-list');
-  const empty = document.querySelector('#delta-empty');
-  list.replaceChildren();
 
   if (!previous) {
-    period.textContent = '尚無前一日快照';
     accountDelta.textContent = '—';
     credentialedDelta.textContent = '—';
-    changeCount.textContent = '尚無比較';
-    empty.textContent = '累積到第二日快照後，這裡就會顯示每日變化。';
-    empty.hidden = false;
+    document.querySelector('#cert-compare-period').textContent = '累積第二日資料後顯示';
     return;
   }
 
-  period.textContent = `${previous.date} → ${latest.date}`;
+  const comparisonPeriod = `${previous.date} → ${latest.date}`;
   const accountChange = (latest.total_accounts || 0) - (previous.total_accounts || 0);
   const credentialedChange = (latest.accounts_with_credentials || 0) - (previous.accounts_with_credentials || 0);
   accountDelta.textContent = formatStockDelta(accountChange);
   credentialedDelta.textContent = formatStockDelta(credentialedChange);
-  accountDelta.title = `${previous.date} → ${latest.date}`;
-  credentialedDelta.title = `${previous.date} → ${latest.date}`;
+  accountDelta.title = comparisonPeriod;
+  credentialedDelta.title = comparisonPeriod;
   accountDelta.setAttribute('aria-label', `較前一日 ${formatDelta(accountChange)}`);
   credentialedDelta.setAttribute('aria-label', `較前一日 ${formatDelta(credentialedChange)}`);
-
-  const oldCounts = previous.certificates || {};
-  const newCounts = latest.certificates || {};
-  const changes = [...new Set([...Object.keys(oldCounts), ...Object.keys(newCounts)])]
-    .map(cert => ({ cert, before: oldCounts[cert] || 0, after: newCounts[cert] || 0 }))
-    .map(item => ({ ...item, delta: item.after - item.before }))
-    .filter(item => item.delta !== 0)
-    .sort((a, b) => b.delta - a.delta || a.cert.localeCompare(b.cert));
-
-  changeCount.textContent = `${numberFormat.format(changes.length)} 種有變化`;
-  empty.hidden = changes.length > 0;
-  empty.textContent = '各證照持有人數與前一日相同。';
-  changes.forEach(({ cert, before, after, delta }) => {
-    const item = document.createElement('li');
-    const name = document.createElement('span');
-    name.className = 'delta-cert-name';
-    name.textContent = cert;
-    const counts = document.createElement('span');
-    counts.className = 'delta-cert-counts';
-    counts.textContent = `${numberFormat.format(before)} → ${numberFormat.format(after)}`;
-    const change = document.createElement('span');
-    change.className = `delta-change ${delta > 0 ? 'delta-up' : 'delta-down'}`;
-    change.textContent = `${formatDelta(delta)} 人`;
-    item.append(name, counts, change);
-    list.append(item);
-  });
+  document.querySelector('#cert-compare-period').textContent = comparisonPeriod;
 }
 
 function makeBadge(cert, url, className = 'badge-frame') {
@@ -197,7 +164,7 @@ function renderPodium(holders) {
   });
 }
 
-function renderCertificateCards(certs, badges) {
+function renderCertificateCards(certs, badges, previous) {
   const grid = document.querySelector('#cert-grid');
   grid.replaceChildren();
 
@@ -221,6 +188,18 @@ function renderCertificateCards(certs, badges) {
     const label = document.createElement('span');
     label.textContent = '人';
     count.append(value, label);
+    if (previous) {
+      const previousCount = (previous.certificates || {})[cert] || 0;
+      const delta = latest.certificates[cert] - previousCount;
+      if (delta !== 0) {
+        const change = document.createElement('span');
+        change.className = 'cert-count-delta';
+        change.textContent = formatStockDelta(delta);
+        change.title = `${previous.date} → ${latest.date}`;
+        change.setAttribute('aria-label', `較前一日 ${formatDelta(delta)}`);
+        count.append(change);
+      }
+    }
     info.append(kicker, title, count);
     card.append(badgeFrame, info);
     grid.append(card);

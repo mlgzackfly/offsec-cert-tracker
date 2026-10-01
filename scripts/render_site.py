@@ -41,7 +41,7 @@ def render_podium(holders):
     return "".join(cards)
 
 
-def render_certificates(counts, badges):
+def render_certificates(counts, badges, previous, current_date):
     certs = sorted(counts, key=lambda cert: (-counts[cert], cert))
     cards = []
     for index, cert in enumerate(certs, start=1):
@@ -51,70 +51,42 @@ def render_certificates(counts, badges):
             f'<img src="{html.escape(image_url, quote=True)}" alt="{safe_cert} Badge" loading="lazy">'
             if image_url.startswith("https://") else ""
         )
+        delta_markup = ""
+        if previous:
+            before = previous.get("certificates", {}).get(cert, 0)
+            delta = counts[cert] - before
+            if delta:
+                marker = f"▲ +{delta:,}" if delta > 0 else f"▼ −{abs(delta):,}"
+                delta_markup = (
+                    f'<span class="cert-count-delta" aria-label="較前一日 {delta:+,}" '
+                    f'title="{html.escape(previous["date"])} → {html.escape(current_date)}">'
+                    f'{marker}</span>'
+                )
         cards.append(
             f'<article class="cert-card"><div class="badge-frame">{image}'
             f'<span class="badge-fallback">{html.escape(cert[:1])}</span></div>'
             f'<div class="cert-info"><span class="cert-kicker">CERTIFICATE {index:02}</span>'
-            f'<h3>{safe_cert}</h3><div class="cert-count"><strong>{counts[cert]:,}</strong><span>人</span></div></div></article>'
+            f'<h3>{safe_cert}</h3><div class="cert-count"><strong>{counts[cert]:,}</strong><span>人</span>{delta_markup}</div></div></article>'
         )
     return certs, "".join(cards)
 
 
-def render_daily_compare(snapshots):
-    if len(snapshots) < 2:
-        return {
-            "period": "尚無前一日快照",
-            "accounts": '<span class="metric-delta" id="delta-accounts" aria-label="較前一日變化">—</span>',
-            "credentialed": '<span class="metric-delta" id="delta-credentialed" aria-label="較前一日變化">—</span>',
-            "change_count": "尚無比較",
-            "certificates": "",
-            "empty": '<p id="delta-empty" class="delta-empty">累積到第二日快照後，這裡就會顯示每日變化。</p>',
-        }
-
-    previous, latest = snapshots[-2:]
-
-    def delta_markup(element_id, current, before):
-        delta = current - before
-        if delta > 0:
-            label = f"▲ +{delta:,}"
-        elif delta < 0:
-            label = f"▼ −{abs(delta):,}"
-        else:
-            label = "— 0"
-        return (f'<span class="metric-delta" id="{element_id}" '
-                f'aria-label="較前一日 {delta:+,}" '
-                f'title="{html.escape(previous["date"])} → {html.escape(latest["date"])}">'
-                f'{label}</span>')
-
-    old_counts = previous.get("certificates", {})
-    new_counts = latest.get("certificates", {})
-    changes = [
-        (cert, old_counts.get(cert, 0), new_counts.get(cert, 0))
-        for cert in set(old_counts) | set(new_counts)
-        if old_counts.get(cert, 0) != new_counts.get(cert, 0)
-    ]
-    changes.sort(key=lambda item: (-(item[2] - item[1]), item[0]))
-    rows = []
-    for cert, before, after in changes:
-        delta = after - before
-        css_class = "delta-up" if delta > 0 else "delta-down"
-        rows.append(
-            f'<li><span class="delta-cert-name">{html.escape(cert)}</span>'
-            f'<span class="delta-cert-counts">{before:,} → {after:,}</span>'
-            f'<span class="delta-change {css_class}">{delta:+,} 人</span></li>'
-        )
-
-    empty = '<p id="delta-empty" class="delta-empty" hidden></p>'
-    if not changes:
-        empty = '<p id="delta-empty" class="delta-empty">各證照持有人數與前一日相同。</p>'
-    return {
-        "period": f'{html.escape(previous["date"])} → {html.escape(latest["date"])}',
-        "accounts": delta_markup("delta-accounts", latest.get("total_accounts", 0), previous.get("total_accounts", 0)),
-        "credentialed": delta_markup("delta-credentialed", latest.get("accounts_with_credentials", 0), previous.get("accounts_with_credentials", 0)),
-        "change_count": f'{len(changes)} 種有變化',
-        "certificates": "".join(rows),
-        "empty": empty,
-    }
+def render_metric_delta(element_id, current, previous_count, previous_date, current_date):
+    if previous_count is None:
+        return f'<span class="metric-delta" id="{element_id}" aria-label="較前一日變化">—</span>'
+    delta = current - previous_count
+    if delta > 0:
+        marker = f"▲ +{delta:,}"
+    elif delta < 0:
+        marker = f"▼ −{abs(delta):,}"
+    else:
+        marker = "— 0"
+    return (
+        f'<span class="metric-delta" id="{element_id}" '
+        f'aria-label="較前一日 {delta:+,}" '
+        f'title="{html.escape(previous_date)} → {html.escape(current_date)}">'
+        f'{marker}</span>'
+    )
 
 
 def render(history, output_path):
@@ -122,10 +94,11 @@ def render(history, output_path):
     if not snapshots:
         raise RuntimeError("No snapshots are available to render.")
     latest = snapshots[-1]
-    comparison = render_daily_compare(snapshots)
+    previous = snapshots[-2] if len(snapshots) > 1 else None
+    compare_period = f'{previous["date"]} → {latest["date"]}' if previous else "累積第二日資料後顯示"
     counts = latest.get("certificates", {})
     badges = latest.get("certificate_badges", {})
-    certs, certificate_cards = render_certificates(counts, badges)
+    certs, certificate_cards = render_certificates(counts, badges, previous, latest["date"])
     template = TEMPLATE.read_text(encoding="utf-8")
 
     description = (
@@ -144,18 +117,15 @@ def render(history, output_path):
             f'<strong id="total-count">{latest.get("total_accounts", 0):,}</strong>',
         '<strong id="credentialed-count">—</strong>':
             f'<strong id="credentialed-count">{latest.get("accounts_with_credentials", 0):,}</strong>',
+        '<span class="metric-delta" id="delta-accounts" aria-label="較前一日變化">—</span>':
+            render_metric_delta("delta-accounts", latest.get("total_accounts", 0), previous.get("total_accounts", 0) if previous else None, previous.get("date", "") if previous else "", latest["date"]),
+        '<span class="metric-delta" id="delta-credentialed" aria-label="較前一日變化">—</span>':
+            render_metric_delta("delta-credentialed", latest.get("accounts_with_credentials", 0), previous.get("accounts_with_credentials", 0) if previous else None, previous.get("date", "") if previous else "", latest["date"]),
         '<span id="credentialed-share">—</span>':
             f'<span id="credentialed-share">{(latest.get("accounts_with_credentials", 0) / max(latest.get("total_accounts", 0), 1) * 100):.1f}%</span>',
         '<span id="cert-type-count">—</span>': f'<span id="cert-type-count">{len(certs)}</span>',
-        '<p id="delta-period" class="delta-period">載入比較資料…</p>':
-            f'<p id="delta-period" class="delta-period">{comparison["period"]}</p>',
-        '<span class="metric-delta" id="delta-accounts" aria-label="較前一日變化">—</span>': comparison["accounts"],
-        '<span class="metric-delta" id="delta-credentialed" aria-label="較前一日變化">—</span>': comparison["credentialed"],
-        '<span id="delta-change-count">—</span>':
-            f'<span id="delta-change-count">{comparison["change_count"]}</span>',
-        '<ul id="delta-cert-list" class="delta-cert-list" aria-live="polite"></ul>':
-            f'<ul id="delta-cert-list" class="delta-cert-list" aria-live="polite">{comparison["certificates"]}</ul>',
-        '<p id="delta-empty" class="delta-empty" hidden></p>': comparison["empty"],
+        '<span id="cert-compare-period">較前一日</span>':
+            f'<span id="cert-compare-period">{html.escape(compare_period)}</span>',
         '<div id="podium" class="podium" aria-live="polite"></div>':
             f'<div id="podium" class="podium" aria-live="polite">{render_podium(latest.get("top_holders", []))}</div>',
         '<div id="cert-grid" class="cert-grid" aria-live="polite"></div>':
