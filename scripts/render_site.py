@@ -64,8 +64,8 @@ def render_daily_compare(snapshots):
     if len(snapshots) < 2:
         return {
             "period": "尚無前一日快照",
-            "accounts": '<strong id="delta-accounts">—</strong>',
-            "credentialed": '<strong id="delta-credentialed">—</strong>',
+            "accounts": '<span class="metric-delta" id="delta-accounts" aria-label="較前一日變化">—</span>',
+            "credentialed": '<span class="metric-delta" id="delta-credentialed" aria-label="較前一日變化">—</span>',
             "change_count": "尚無比較",
             "certificates": "",
             "empty": '<p id="delta-empty" class="delta-empty">累積到第二日快照後，這裡就會顯示每日變化。</p>',
@@ -75,9 +75,16 @@ def render_daily_compare(snapshots):
 
     def delta_markup(element_id, current, before):
         delta = current - before
-        css_class = "delta-up" if delta > 0 else "delta-down" if delta < 0 else ""
-        return (f'<strong id="{element_id}" class="{css_class}">'
-                f'{delta:+,}</strong>')
+        if delta > 0:
+            label = f"▲ +{delta:,}"
+        elif delta < 0:
+            label = f"▼ −{abs(delta):,}"
+        else:
+            label = "— 0"
+        return (f'<span class="metric-delta" id="{element_id}" '
+                f'aria-label="較前一日 {delta:+,}" '
+                f'title="{html.escape(previous["date"])} → {html.escape(latest["date"])}">'
+                f'{label}</span>')
 
     old_counts = previous.get("certificates", {})
     new_counts = latest.get("certificates", {})
@@ -142,8 +149,8 @@ def render(history, output_path):
         '<span id="cert-type-count">—</span>': f'<span id="cert-type-count">{len(certs)}</span>',
         '<p id="delta-period" class="delta-period">載入比較資料…</p>':
             f'<p id="delta-period" class="delta-period">{comparison["period"]}</p>',
-        '<strong id="delta-accounts">—</strong>': comparison["accounts"],
-        '<strong id="delta-credentialed">—</strong>': comparison["credentialed"],
+        '<span class="metric-delta" id="delta-accounts" aria-label="較前一日變化">—</span>': comparison["accounts"],
+        '<span class="metric-delta" id="delta-credentialed" aria-label="較前一日變化">—</span>': comparison["credentialed"],
         '<span id="delta-change-count">—</span>':
             f'<span id="delta-change-count">{comparison["change_count"]}</span>',
         '<ul id="delta-cert-list" class="delta-cert-list" aria-live="polite"></ul>':

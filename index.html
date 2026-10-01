@@ -54,12 +54,12 @@
     <section class="metrics" aria-label="台灣 OffSec 帳號統計">
       <article class="metric metric-dark">
         <div class="metric-label"><span class="metric-number">01</span><h2>OffSec 台灣帳號總數</h2></div>
-        <strong id="total-count">—</strong>
+        <div class="metric-value-line"><strong id="total-count">—</strong><span class="metric-delta" id="delta-accounts" aria-label="較前一日變化">—</span></div>
         <p>OffSec 全球排行榜中，國家標記為 TW 的帳號</p>
       </article>
       <article class="metric metric-accent">
         <div class="metric-label"><span class="metric-number">02</span><h2>至少擁有一張證照</h2></div>
-        <strong id="credentialed-count">—</strong>
+        <div class="metric-value-line"><strong id="credentialed-count">—</strong><span class="metric-delta" id="delta-credentialed" aria-label="較前一日變化">—</span></div>
         <p><span id="credentialed-share">—</span> 的台灣排行榜帳號有公開證照</p>
       </article>
     </section>
@@ -71,10 +71,6 @@
       </div>
       <div class="delta-card">
         <p id="delta-period" class="delta-period">載入比較資料…</p>
-        <div class="delta-summary">
-          <article class="delta-stat"><span>排行榜帳號</span><strong id="delta-accounts">—</strong></article>
-          <article class="delta-stat"><span>至少擁有一張證照</span><strong id="delta-credentialed">—</strong></article>
-        </div>
         <div class="delta-detail-heading"><h3>各證照持有人數變化</h3><span id="delta-change-count">—</span></div>
         <ul id="delta-cert-list" class="delta-cert-list" aria-live="polite"></ul>
         <p id="delta-empty" class="delta-empty" hidden></p>

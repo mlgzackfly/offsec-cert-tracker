@@ -45,6 +45,12 @@ function formatDelta(value) {
   return `${value > 0 ? '+' : ''}${numberFormat.format(value)}`;
 }
 
+function formatStockDelta(value) {
+  if (value > 0) return `▲ +${numberFormat.format(value)}`;
+  if (value < 0) return `▼ −${numberFormat.format(Math.abs(value))}`;
+  return '— 0';
+}
+
 function renderDailyCompare() {
   const previous = snapshots.at(-2);
   const period = document.querySelector('#delta-period');
@@ -68,10 +74,12 @@ function renderDailyCompare() {
   period.textContent = `${previous.date} → ${latest.date}`;
   const accountChange = (latest.total_accounts || 0) - (previous.total_accounts || 0);
   const credentialedChange = (latest.accounts_with_credentials || 0) - (previous.accounts_with_credentials || 0);
-  accountDelta.textContent = formatDelta(accountChange);
-  credentialedDelta.textContent = formatDelta(credentialedChange);
-  accountDelta.className = accountChange > 0 ? 'delta-up' : accountChange < 0 ? 'delta-down' : '';
-  credentialedDelta.className = credentialedChange > 0 ? 'delta-up' : credentialedChange < 0 ? 'delta-down' : '';
+  accountDelta.textContent = formatStockDelta(accountChange);
+  credentialedDelta.textContent = formatStockDelta(credentialedChange);
+  accountDelta.title = `${previous.date} → ${latest.date}`;
+  credentialedDelta.title = `${previous.date} → ${latest.date}`;
+  accountDelta.setAttribute('aria-label', `較前一日 ${formatDelta(accountChange)}`);
+  credentialedDelta.setAttribute('aria-label', `較前一日 ${formatDelta(credentialedChange)}`);
 
   const oldCounts = previous.certificates || {};
   const newCounts = latest.certificates || {};
