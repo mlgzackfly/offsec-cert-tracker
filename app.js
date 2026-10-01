@@ -35,9 +35,69 @@ function render() {
   const select = document.querySelector('#chart-cert');
   select.replaceChildren(...certs.map(cert => new Option(cert, cert)));
   select.addEventListener('change', drawChart);
+  renderDailyCompare();
   renderPodium(latest.top_holders || []);
   renderCertificateCards(certs, certificateBadges);
   drawChart();
+}
+
+function formatDelta(value) {
+  return `${value > 0 ? '+' : ''}${numberFormat.format(value)}`;
+}
+
+function renderDailyCompare() {
+  const previous = snapshots.at(-2);
+  const period = document.querySelector('#delta-period');
+  const accountDelta = document.querySelector('#delta-accounts');
+  const credentialedDelta = document.querySelector('#delta-credentialed');
+  const changeCount = document.querySelector('#delta-change-count');
+  const list = document.querySelector('#delta-cert-list');
+  const empty = document.querySelector('#delta-empty');
+  list.replaceChildren();
+
+  if (!previous) {
+    period.textContent = '尚無前一日快照';
+    accountDelta.textContent = '—';
+    credentialedDelta.textContent = '—';
+    changeCount.textContent = '尚無比較';
+    empty.textContent = '累積到第二日快照後，這裡就會顯示每日變化。';
+    empty.hidden = false;
+    return;
+  }
+
+  period.textContent = `${previous.date} → ${latest.date}`;
+  const accountChange = (latest.total_accounts || 0) - (previous.total_accounts || 0);
+  const credentialedChange = (latest.accounts_with_credentials || 0) - (previous.accounts_with_credentials || 0);
+  accountDelta.textContent = formatDelta(accountChange);
+  credentialedDelta.textContent = formatDelta(credentialedChange);
+  accountDelta.className = accountChange > 0 ? 'delta-up' : accountChange < 0 ? 'delta-down' : '';
+  credentialedDelta.className = credentialedChange > 0 ? 'delta-up' : credentialedChange < 0 ? 'delta-down' : '';
+
+  const oldCounts = previous.certificates || {};
+  const newCounts = latest.certificates || {};
+  const changes = [...new Set([...Object.keys(oldCounts), ...Object.keys(newCounts)])]
+    .map(cert => ({ cert, before: oldCounts[cert] || 0, after: newCounts[cert] || 0 }))
+    .map(item => ({ ...item, delta: item.after - item.before }))
+    .filter(item => item.delta !== 0)
+    .sort((a, b) => b.delta - a.delta || a.cert.localeCompare(b.cert));
+
+  changeCount.textContent = `${numberFormat.format(changes.length)} 種有變化`;
+  empty.hidden = changes.length > 0;
+  empty.textContent = '各證照持有人數與前一日相同。';
+  changes.forEach(({ cert, before, after, delta }) => {
+    const item = document.createElement('li');
+    const name = document.createElement('span');
+    name.className = 'delta-cert-name';
+    name.textContent = cert;
+    const counts = document.createElement('span');
+    counts.className = 'delta-cert-counts';
+    counts.textContent = `${numberFormat.format(before)} → ${numberFormat.format(after)}`;
+    const change = document.createElement('span');
+    change.className = `delta-change ${delta > 0 ? 'delta-up' : 'delta-down'}`;
+    change.textContent = `${formatDelta(delta)} 人`;
+    item.append(name, counts, change);
+    list.append(item);
+  });
 }
 
 function makeBadge(cert, url, className = 'badge-frame') {
