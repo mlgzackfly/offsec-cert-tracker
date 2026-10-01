@@ -5,7 +5,7 @@ import math
 import urllib.parse
 import urllib.request
 from collections import Counter
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 from xml.sax.saxutils import escape
@@ -126,10 +126,15 @@ def write_trend_chart(history):
                      for snapshot in snapshots for cert in certificates), default=1)
     scale_top = max(5, math.ceil(max_value / 50) * 50)
 
-    def x(index):
+    date_ordinals = [date.fromisoformat(snapshot["date"]).toordinal() for snapshot in snapshots]
+    first_day, last_day = date_ordinals[0], date_ordinals[-1]
+    date_span = max(last_day - first_day, 1)
+
+    def x(snapshot):
         if len(snapshots) < 2:
             return left + chart_width / 2
-        return left + index * chart_width / (len(snapshots) - 1)
+        day = date.fromisoformat(snapshot["date"]).toordinal()
+        return left + (day - first_day) * chart_width / date_span
 
     def y(value):
         return top + chart_height * (1 - value / scale_top)
@@ -157,10 +162,8 @@ def write_trend_chart(history):
         parts.append(f'<text x="{left - 12}" y="{y_pos + 4:.1f}" text-anchor="end" fill="#8b928b" font-family="Arial,sans-serif" font-size="11">{round(value)}</text>')
 
     for index, cert in enumerate(certificates):
-        points = [
-            (x(point_index), y(snapshot.get("certificates", {}).get(cert, 0)))
-            for point_index, snapshot in enumerate(snapshots)
-        ]
+        points = [(x(snapshot), y(snapshot.get("certificates", {}).get(cert, 0)))
+                  for snapshot in snapshots]
         if len(points) > 1:
             path = " ".join(f"{'M' if point_index == 0 else 'L'} {point_x:.1f} {point_y:.1f}"
                             for point_index, (point_x, point_y) in enumerate(points))
@@ -168,11 +171,17 @@ def write_trend_chart(history):
         for point_x, point_y in points:
             parts.append(f'<circle cx="{point_x:.1f}" cy="{point_y:.1f}" r="4.5" fill="{colors[index]}" stroke="#fffefa" stroke-width="2"/>')
 
-    date_indices = sorted({0, len(snapshots) // 2, len(snapshots) - 1})
-    for index in date_indices:
-        date = escape(snapshots[index].get("date", ""))
-        anchor = "start" if index == 0 else "end" if index == len(snapshots) - 1 else "middle"
-        parts.append(f'<text x="{x(index):.1f}" y="{height - 42}" text-anchor="{anchor}" fill="#8b928b" font-family="Arial,sans-serif" font-size="11">{date}</text>')
+    date_ticks = list(range(first_day, last_day + 1, 30))
+    if date_ticks[-1] != last_day:
+        date_ticks.append(last_day)
+    for index, tick_day in enumerate(date_ticks):
+        tick_x = left + (chart_width / 2 if len(snapshots) < 2 else
+                         (tick_day - first_day) * chart_width / date_span)
+        if index > 0 and index < len(date_ticks) - 1:
+            parts.append(f'<line x1="{tick_x:.1f}" y1="{top}" x2="{tick_x:.1f}" y2="{height - bottom}" stroke="#f0eee8" stroke-width="1" stroke-dasharray="3 5"/>')
+        anchor = "start" if index == 0 else "end" if index == len(date_ticks) - 1 else "middle"
+        label = escape(date.fromordinal(tick_day).strftime("%m-%d"))
+        parts.append(f'<text x="{tick_x:.1f}" y="{height - 42}" text-anchor="{anchor}" fill="#8b928b" font-family="Arial,sans-serif" font-size="11">{label}</text>')
 
     if len(snapshots) == 1:
         note = "Trend tracking has started. More daily snapshots will build the lines over time."

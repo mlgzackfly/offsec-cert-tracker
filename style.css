@@ -11,3 +11,4 @@
 .metric-value-line{display:flex;align-items:baseline;gap:14px;margin:16px 0 2px;min-width:0}.metric-value-line>strong{display:block;margin:0;font:500 clamp(44px,6vw,63px) var(--mono);letter-spacing:-.075em;line-height:1}.metric-delta{flex:none;color:#c7352f;font:700 clamp(12px,1.4vw,16px) var(--mono);letter-spacing:-.045em;white-space:nowrap}.metric-dark .metric-delta{color:#ff786f}.metric-accent .metric-delta{color:#c7352f}.metric p{margin-top:11px}
 @media(max-width:620px){.metric-value-line{gap:11px;margin-top:13px}.metric-value-line>strong{font-size:49px}.metric-delta{font-size:13px}}
 .cert-count-delta{margin-left:4px;color:#c7352f;font:700 10px var(--mono);letter-spacing:-.04em;white-space:nowrap}
+.date-gridline{stroke:#f0eee8;stroke-width:1;stroke-dasharray:2 4}.axis-date-label{fill:#9ba09a;font:9px var(--mono)}

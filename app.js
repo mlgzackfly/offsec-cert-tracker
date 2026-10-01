@@ -229,7 +229,16 @@ function drawChart() {
   const width = 900, height = 300, left = 50, right = 16, top = 18, bottom = 34;
   const maximum = Math.max(...values.map(point => point.count), 1);
   const scaleTop = Math.ceil(maximum / 10) * 10 || 1;
-  const x = index => left + (values.length < 2 ? (width - left - right) / 2 : index * (width - left - right) / (values.length - 1));
+  const dayMs = 24 * 60 * 60 * 1000;
+  const toDay = date => {
+    const [year, month, day] = date.split('-').map(Number);
+    return Date.UTC(year, month - 1, day);
+  };
+  const firstDay = toDay(values[0].date);
+  const lastDay = toDay(values.at(-1).date);
+  const dateSpan = Math.max(lastDay - firstDay, 1);
+  const plotWidth = width - left - right;
+  const x = point => left + (values.length < 2 ? plotWidth / 2 : (toDay(point.date) - firstDay) / dateSpan * plotWidth);
   const y = count => top + (scaleTop - count) / scaleTop * (height - top - bottom);
 
   let markup = '<defs><linearGradient id="area" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#e86c43" stop-opacity=".20"/><stop offset="1" stop-color="#e86c43" stop-opacity="0"/></linearGradient></defs>';
@@ -240,13 +249,26 @@ function drawChart() {
     markup += `<text class="axis-label" x="${left - 9}" y="${yPosition + 4}" text-anchor="end">${Math.round(count)}</text>`;
   }
 
+  const dateTicks = [];
+  for (let tick = firstDay; tick <= lastDay; tick += 30 * dayMs) dateTicks.push(tick);
+  if (dateTicks.at(-1) !== lastDay) dateTicks.push(lastDay);
+  dateTicks.forEach((tick, index) => {
+    const tickX = left + (values.length < 2 ? plotWidth / 2 : (tick - firstDay) / dateSpan * plotWidth);
+    if (index > 0 && index < dateTicks.length - 1) {
+      markup += `<line class="date-gridline" x1="${tickX}" x2="${tickX}" y1="${top}" y2="${height - bottom}"/>`;
+    }
+    const anchor = index === 0 ? 'start' : index === dateTicks.length - 1 ? 'end' : 'middle';
+    const label = new Date(tick).toISOString().slice(5, 10);
+    markup += `<text class="axis-date-label" x="${tickX}" y="${height - 8}" text-anchor="${anchor}">${label}</text>`;
+  });
+
   if (values.length) {
-    const points = values.map((point, index) => `${x(index)},${y(point.count)}`).join(' ');
-    const area = `${x(0)},${height - bottom} ${points} ${x(values.length - 1)},${height - bottom}`;
+    const points = values.map(point => `${x(point)},${y(point.count)}`).join(' ');
+    const area = `${x(values[0])},${height - bottom} ${points} ${x(values.at(-1))},${height - bottom}`;
     markup += `<polygon class="chart-area" points="${area}"/>`;
     markup += `<polyline class="chart-line" points="${points}"/>`;
     const lastIndex = values.length - 1;
-    markup += `<circle class="chart-dot" cx="${x(lastIndex)}" cy="${y(values[lastIndex].count)}" r="5"/>`;
+    markup += `<circle class="chart-dot" cx="${x(values[lastIndex])}" cy="${y(values[lastIndex].count)}" r="5"/>`;
   }
 
   svg.innerHTML = markup;
