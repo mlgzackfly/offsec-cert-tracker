@@ -31,7 +31,7 @@ const translations = {
   'zh-Hant': {
     taiwanLink: '台灣版 ↗', globalLeaderboard: '全球公開排行榜', languageLabel: '語言', stampAria: '資料更新資訊',
     heroEyebrow: 'Worldwide · 公開排行榜資料', heroTitle: 'OffSec 全球<br><span>證照地圖</span>',
-    heroLede: '探索全球排行榜公開證照與持有人數，拖曳旋轉地球並點選國家查看分布。',
+    heroLede: '瀏覽全球公開證照統計，旋轉地球並選擇國家查看分布。',
     latestSnapshot: '最新全球快照', updateSchedule: '台北時間 · 每日更新兩次', loadingHistory: '載入歷史資料…',
     snapshots: n => `已累積 ${n} 日全球快照`, metricsLabel: 'OffSec 全球排行榜統計',
     totalAccounts: '全球排行榜帳號', accountsCaption: '分頁取得並去重', reported: n => `（API 回報 ${n}）`,
@@ -98,6 +98,8 @@ const globalApi = {
   manuallySelectedCountry: false,
   ipDetectionState: 'idle',
   ipDetectedCountryCode: null,
+  globeState: 'loading',
+  globeError: null,
   metric: 'certificates'
 };
 
@@ -160,16 +162,28 @@ async function initGlobal() {
       populateCountrySelector();
       renderCountryRanking();
       detectCountryByIp();
-      document.querySelector('#globe-status').textContent = t('globeError')(error.message);
+      globalApi.globeState = 'error';
+      globalApi.globeError = error.message;
+      renderGlobeStatus();
     }
   } catch (error) {
     document.querySelector('#global-snapshot-date').textContent = t('fetchError');
     document.querySelector('#global-snapshot-count').textContent = error.message;
-    document.querySelector('#globe-status').textContent = '全球資料目前無法載入。';
+    globalApi.globeState = 'data-error';
+    renderGlobeStatus();
   }
 }
 
 function t(key) { return translations[currentLanguage][key]; }
+
+function renderGlobeStatus() {
+  const status = document.querySelector('#globe-status');
+  if (!status) return;
+  if (globalApi.globeState === 'ready') status.textContent = t('globeReady');
+  else if (globalApi.globeState === 'error') status.textContent = t('globeError')(globalApi.globeError || '');
+  else if (globalApi.globeState === 'data-error') status.textContent = t('fetchError');
+  else status.textContent = t('loadingGlobe');
+}
 
 function applyLanguage() {
   globalNumber = new Intl.NumberFormat(currentLanguage === 'zh-Hant' ? 'zh-TW' : currentLanguage === 'ja' ? 'ja-JP' : 'en');
@@ -194,7 +208,7 @@ function applyLanguage() {
   document.querySelector('meta[property="og:title"]').content = document.title;
   document.querySelector('meta[property="og:locale"]').content = currentLanguage === 'zh-Hant' ? 'zh_TW' : currentLanguage === 'ja' ? 'ja_JP' : 'en_US';
   document.querySelector('#global-snapshot-count').textContent = t('loadingHistory');
-  document.querySelector('#globe-status').textContent = t('loadingGlobe');
+  renderGlobeStatus();
   renderIpStatus();
   if (globalApi.latest && window.globalHistorySnapshots) renderGlobalSummary(window.globalHistorySnapshots);
 }
@@ -434,8 +448,16 @@ function updateSelectedCountryRank() {
 function colorFor(value, maximum) {
   if (!value) return '#23383e';
   const intensity = Math.log1p(value) / Math.log1p(Math.max(maximum, 1));
-  const low = [45, 103, 97], high = [232, 108, 67];
-  const channel = (index) => Math.round(low[index] + (high[index] - low[index]) * intensity);
+  const stops = [
+    { at: 0, rgb: [59, 82, 139] },
+    { at: 0.5, rgb: [33, 145, 140] },
+    { at: 1, rgb: [253, 231, 37] }
+  ];
+  const upperIndex = stops.findIndex(stop => intensity <= stop.at);
+  const lower = stops[Math.max(0, upperIndex - 1)];
+  const upper = stops[upperIndex < 0 ? stops.length - 1 : upperIndex];
+  const mix = (intensity - lower.at) / Math.max(upper.at - lower.at, Number.EPSILON);
+  const channel = index => Math.round(lower.rgb[index] + (upper.rgb[index] - lower.rgb[index]) * mix);
   return `rgb(${channel(0)}, ${channel(1)}, ${channel(2)})`;
 }
 
@@ -492,7 +514,8 @@ function initializeGlobe() {
     globalApi.globe.pointOfView({ lat: props.LABEL_Y || 0, lng: props.LABEL_X || 0, altitude: 1.5 }, 0);
   }
   updateGlobeColors();
-  document.querySelector('#globe-status').textContent = t('globeReady');
+  globalApi.globeState = 'ready';
+  renderGlobeStatus();
 
   const metricSelector = document.querySelector('#map-metric');
   metricSelector.addEventListener('change', () => {
