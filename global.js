@@ -15,7 +15,7 @@ const translations = {
     mapCertificatesTotal: 'Certificate total', mapAccountsTotal: 'Account total',
     globeHelp: 'Drag to rotate · Scroll to zoom', globeAria: 'Interactive globe colored by public OffSec account and certificate counts',
     loadingGlobe: 'Loading globe and country statistics…', globeReady: 'Globe ready · Drag to rotate, scroll to zoom, select a country for details',
-    fewer: 'Fewer', more: 'More', countryData: 'Country details', countryPickerLabel: 'Find a country or region', countryPickerPlaceholder: 'Choose a country or region…', countryPrompt: 'Select a country on the globe or choose one from the ranking.',
+    fewer: 'Fewer', more: 'More', countryData: 'Country details', globalRankLabel: 'Global rank', rankMetricCertificates: 'by certificate total', rankMetricAccounts: 'by account total', notRanked: 'Not ranked', countryPickerLabel: 'Find a country or region', countryPickerPlaceholder: 'Choose a country or region…', countryPrompt: 'Select a country on the globe or choose one from the ranking.',
     certificateHolders: 'Public certificate holders', noPublicCertificates: 'No public certificates listed',
     countryRankingCertificates: 'Certificate total', countryRankingAccounts: 'Account total',
     countries: n => `${n} countries`, tooltipAccounts: 'leaderboard accounts', tooltipCredentialed: 'accounts with certificates', tooltipCertificates: 'public certificates',
@@ -44,7 +44,7 @@ const translations = {
     mapCertificatesTotal: '證照總數', mapAccountsTotal: '帳號總數',
     globeHelp: '拖曳旋轉 · 滾輪縮放', globeAria: '依 OffSec 公開帳號與證照持有人數著色的互動式地球',
     loadingGlobe: '正在載入地球與國家統計…', globeReady: '地球已載入 · 拖曳旋轉，滾輪縮放，點選國家查看資料',
-    fewer: '較少', more: '較多', countryData: '國家資料', countryPickerLabel: '尋找國家或地區', countryPickerPlaceholder: '選擇國家或地區…', countryPrompt: '在地球上選一個國家，或從排行挑選。',
+    fewer: '較少', more: '較多', countryData: '國家資料', globalRankLabel: '全球排名', rankMetricCertificates: '依證照總數排名', rankMetricAccounts: '依帳號總數排名', notRanked: '尚無排名', countryPickerLabel: '尋找國家或地區', countryPickerPlaceholder: '選擇國家或地區…', countryPrompt: '在地球上選一個國家，或從排行挑選。',
     certificateHolders: '公開證照持有人數', noPublicCertificates: '尚無列出公開證照',
     countryRankingCertificates: '證照總數', countryRankingAccounts: '帳號總數',
     countries: n => `${n} 個國家`, tooltipAccounts: '排行榜帳號', tooltipCredentialed: '至少一張證照', tooltipCertificates: '張公開證照',
@@ -73,7 +73,7 @@ const translations = {
     mapCertificatesTotal: '資格総数', mapAccountsTotal: 'アカウント総数',
     globeHelp: 'ドラッグで回転 · スクロールでズーム', globeAria: 'OffSec 公開アカウントと資格数を色で示すインタラクティブ地球儀',
     loadingGlobe: '地球儀と国別統計を読み込み中…', globeReady: '地球儀を表示しました · ドラッグで回転、スクロールでズーム、国を選択して詳細を表示',
-    fewer: '少ない', more: '多い', countryData: '国別データ', countryPickerLabel: '国・地域を検索', countryPickerPlaceholder: '国・地域を選択…', countryPrompt: '地球儀上の国、またはランキングから国を選択してください。',
+    fewer: '少ない', more: '多い', countryData: '国別データ', globalRankLabel: '世界ランキング', rankMetricCertificates: '資格総数順', rankMetricAccounts: 'アカウント総数順', notRanked: 'ランキング対象外', countryPickerLabel: '国・地域を検索', countryPickerPlaceholder: '国・地域を選択…', countryPrompt: '地球儀上の国、またはランキングから国を選択してください。',
     certificateHolders: '公開資格の保有者数', noPublicCertificates: '公開資格はありません',
     countryRankingCertificates: '資格総数', countryRankingAccounts: 'アカウント総数',
     countries: n => `${n} か国`, tooltipAccounts: 'ランキングアカウント', tooltipCredentialed: '資格保有アカウント', tooltipCertificates: '公開資格',
@@ -331,6 +331,7 @@ function selectCountry(code, coordinates) {
   document.querySelector('#country-name').textContent = `${code} · ${countryName(feature, code)}`;
   document.querySelector('#country-accounts').textContent = globalNumber.format(record.accounts || 0);
   document.querySelector('#country-credentialed').textContent = globalNumber.format(record.accounts_with_credentials || 0);
+  updateSelectedCountryRank();
   const certList = document.querySelector('#country-cert-list');
   certList.replaceChildren();
   Object.entries(record.certificates || {})
@@ -357,6 +358,19 @@ function selectCountry(code, coordinates) {
     globalApi.globe.pointOfView({ lat: coordinates.lat, lng: coordinates.lng, altitude: 1.5 }, 700);
   }
   globalApi.globe?.polygonAltitude(feature => countryCode(feature) === code ? 0.012 : (metricValue(globalApi.latest.countries?.[countryCode(feature)]) ? 0.006 : 0.0015));
+}
+
+function updateSelectedCountryRank() {
+  const code = globalApi.countryCode;
+  if (!code) return;
+  const ranking = Object.entries(globalApi.latest?.countries || {})
+    .filter(([country]) => !isUnknownCountry(country))
+    .sort((a, b) => metricValue(b[1]) - metricValue(a[1]) || a[0].localeCompare(b[0]));
+  const rank = ranking.findIndex(([country]) => country === code);
+  document.querySelector('#country-global-rank').textContent = rank >= 0
+    ? `#${globalNumber.format(rank + 1)}` : t('notRanked');
+  document.querySelector('#country-rank-metric').textContent = globalApi.metric === 'accounts'
+    ? t('rankMetricAccounts') : t('rankMetricCertificates');
 }
 
 function colorFor(value, maximum) {
@@ -419,6 +433,7 @@ function initializeGlobe() {
     globalApi.metric = metricSelector.value;
     renderCountryRanking();
     updateGlobeColors();
+    updateSelectedCountryRank();
   });
   const resizeObserver = new ResizeObserver(() => {
     globalApi.globe.width(container.clientWidth).height(container.clientHeight);
