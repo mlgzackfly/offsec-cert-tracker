@@ -12,12 +12,12 @@ const translations = {
     globeEyebrow: 'Interactive globe', worldTitle: 'Where are certificate holders?',
     worldDescription: 'Country colors show the selected total. Select a country or ranking entry for details.',
     globeMetric: 'Show on globe', globeMetricAria: 'Choose a statistic to show on the globe', credentialedAccountsShort: 'With at least one certificate', allAccounts: 'Leaderboard accounts',
-    mapCertificatesTotal: 'Certificate total', mapAccountsTotal: 'Account total',
+    mapCertificatesTotal: 'Certificate total', mapAccountsTotal: 'Account total', mapCertificateLabel: 'By certificate',
     globeHelp: 'Drag to rotate · Scroll to zoom', globeAria: 'Interactive globe colored by public OffSec account and certificate counts',
     loadingGlobe: 'Loading globe and country statistics…', globeReady: 'Globe ready · Drag to rotate, scroll to zoom, select a country for details',
-    fewer: 'Fewer', more: 'More', countryData: 'Country details', globalRankLabel: 'Global rank', rankMetricCertificates: 'by certificate total', rankMetricAccounts: 'by account total', notRanked: 'Not ranked', countryPickerLabel: 'Find a country or region', countryPickerPlaceholder: 'Choose a country or region…', ipLookupPrefix: 'For IP-based country selection, this page queries', ipLookupSuffix: '; the service receives your public IP.', ipDetecting: 'Detecting country from IP…', ipSelected: country => `Country preselected: ${country}.`, ipManual: 'Country selected manually.', ipFailed: 'Could not detect your country. Choose it from the list.', countryPrompt: 'Select a country on the globe or choose one from the ranking.',
+    fewer: 'Fewer', more: 'More', countryData: 'Country details', globalRankLabel: 'Global rank', rankMetricCertificates: 'by certificate total', rankMetricAccounts: 'by account total', rankMetricSpecific: certificate => `by ${certificate} holders`, tooltipCertificateSpecific: certificate => `${certificate} holders`, notRanked: 'Not ranked', countryPickerLabel: 'Find a country or region', countryPickerPlaceholder: 'Choose a country or region…', ipLookupPrefix: 'For IP-based country selection, this page queries', ipLookupSuffix: '; the service receives your public IP.', ipDetecting: 'Detecting country from IP…', ipSelected: country => `Country preselected: ${country}.`, ipManual: 'Country selected manually.', ipFailed: 'Could not detect your country. Choose it from the list.', countryPrompt: 'Select a country on the globe or choose one from the ranking.',
     certificateHolders: 'Public certificate holders', noPublicCertificates: 'No public certificates listed',
-    countryRankingCertificates: 'Certificate total', countryRankingAccounts: 'Account total',
+    countryRankingCertificates: 'Certificate total', countryRankingAccounts: 'Account total', countryRankingSpecific: certificate => `${certificate} holders`,
     countries: n => `${n} countries`, tooltipAccounts: 'leaderboard accounts', tooltipCredentialed: 'accounts with certificates', tooltipCertificates: 'public certificates',
     unknownCountryEyebrow: 'COUNTRY NOT SET', unknownCountryTitle: 'Unknown / country not set', unknownCountryAccounts: 'accounts without a country in their profile',
     coverageNoteTitle: 'Country-level estimate', coverageNoteText: 'Because country values come from profile settings, certificate counts by country may differ slightly from the actual distribution.',
@@ -41,12 +41,12 @@ const translations = {
     globeEyebrow: '互動地球', worldTitle: '證照持有人遍布哪裡？',
     worldDescription: '國家顏色代表所選統計總數；點選地球或國家排行查看詳細資料。',
     globeMetric: '地球顯示', globeMetricAria: '選擇地球顯示的統計項目', credentialedAccountsShort: '至少擁有一張證照', allAccounts: '排行榜帳號總數',
-    mapCertificatesTotal: '證照總數', mapAccountsTotal: '帳號總數',
+    mapCertificatesTotal: '證照總數', mapAccountsTotal: '帳號總數', mapCertificateLabel: '依證照',
     globeHelp: '拖曳旋轉 · 滾輪縮放', globeAria: '依 OffSec 公開帳號與證照持有人數著色的互動式地球',
     loadingGlobe: '正在載入地球與國家統計…', globeReady: '地球已載入 · 拖曳旋轉，滾輪縮放，點選國家查看資料',
-    fewer: '較少', more: '較多', countryData: '國家資料', globalRankLabel: '全球排名', rankMetricCertificates: '依證照總數排名', rankMetricAccounts: '依帳號總數排名', notRanked: '尚無排名', countryPickerLabel: '尋找國家或地區', countryPickerPlaceholder: '選擇國家或地區…', ipLookupPrefix: 'IP 自動選國會查詢', ipLookupSuffix: '；該服務會收到你的公開 IP。', ipDetecting: '正在依 IP 判斷國家…', ipSelected: country => `已依 IP 預選：${country}`, ipManual: '已手動選擇國家。', ipFailed: '無法判斷國家，請從下拉選單選擇。', countryPrompt: '在地球上選一個國家，或從排行挑選。',
+    fewer: '較少', more: '較多', countryData: '國家資料', globalRankLabel: '全球排名', rankMetricCertificates: '依證照總數排名', rankMetricAccounts: '依帳號總數排名', rankMetricSpecific: certificate => `依 ${certificate} 持有人數排名`, tooltipCertificateSpecific: certificate => `${certificate} 持有人數`, notRanked: '尚無排名', countryPickerLabel: '尋找國家或地區', countryPickerPlaceholder: '選擇國家或地區…', ipLookupPrefix: 'IP 自動選國會查詢', ipLookupSuffix: '；該服務會收到你的公開 IP。', ipDetecting: '正在依 IP 判斷國家…', ipSelected: country => `已依 IP 預選：${country}`, ipManual: '已手動選擇國家。', ipFailed: '無法判斷國家，請從下拉選單選擇。', countryPrompt: '在地球上選一個國家，或從排行挑選。',
     certificateHolders: '公開證照持有人數', noPublicCertificates: '尚無列出公開證照',
-    countryRankingCertificates: '證照總數', countryRankingAccounts: '帳號總數',
+    countryRankingCertificates: '證照總數', countryRankingAccounts: '帳號總數', countryRankingSpecific: certificate => `${certificate} 持有人數`,
     countries: n => `${n} 個國家`, tooltipAccounts: '排行榜帳號', tooltipCredentialed: '至少一張證照', tooltipCertificates: '張公開證照',
     unknownCountryEyebrow: '未設定國家', unknownCountryTitle: '未知／未設定國家', unknownCountryAccounts: '個人檔案未設定國家的帳號',
     coverageNoteTitle: '國別數量提醒', coverageNoteText: '由於個人檔案中的國家設定，按國家統計的證照數量可能與實際分布略有差異。',
@@ -70,12 +70,12 @@ const translations = {
     globeEyebrow: 'インタラクティブ地球儀', worldTitle: '資格保有者はどこにいる？',
     worldDescription: '国の色は選択した合計値を示します。地球またはランキングから国を選ぶと詳細を表示します。',
     globeMetric: '地球儀に表示', globeMetricAria: '地球儀に表示する統計を選択', credentialedAccountsShort: '資格を1つ以上保有', allAccounts: 'ランキングアカウント総数',
-    mapCertificatesTotal: '資格総数', mapAccountsTotal: 'アカウント総数',
+    mapCertificatesTotal: '資格総数', mapAccountsTotal: 'アカウント総数', mapCertificateLabel: '資格別',
     globeHelp: 'ドラッグで回転 · スクロールでズーム', globeAria: 'OffSec 公開アカウントと資格数を色で示すインタラクティブ地球儀',
     loadingGlobe: '地球儀と国別統計を読み込み中…', globeReady: '地球儀を表示しました · ドラッグで回転、スクロールでズーム、国を選択して詳細を表示',
-    fewer: '少ない', more: '多い', countryData: '国別データ', globalRankLabel: '世界ランキング', rankMetricCertificates: '資格総数順', rankMetricAccounts: 'アカウント総数順', notRanked: 'ランキング対象外', countryPickerLabel: '国・地域を検索', countryPickerPlaceholder: '国・地域を選択…', ipLookupPrefix: 'IP による国の自動選択では', ipLookupSuffix: 'に問い合わせます。このサービスには公開 IP が送信されます。', ipDetecting: 'IP から国を確認しています…', ipSelected: country => `IP に基づき${country}を選択しました。`, ipManual: '国を手動で選択しました。', ipFailed: '国を判定できませんでした。リストから選択してください。', countryPrompt: '地球儀上の国、またはランキングから国を選択してください。',
+    fewer: '少ない', more: '多い', countryData: '国別データ', globalRankLabel: '世界ランキング', rankMetricCertificates: '資格総数順', rankMetricAccounts: 'アカウント総数順', rankMetricSpecific: certificate => `${certificate} の保有者数順`, tooltipCertificateSpecific: certificate => `${certificate} 保有者`, notRanked: 'ランキング対象外', countryPickerLabel: '国・地域を検索', countryPickerPlaceholder: '国・地域を選択…', ipLookupPrefix: 'IP による国の自動選択では', ipLookupSuffix: 'に問い合わせます。このサービスには公開 IP が送信されます。', ipDetecting: 'IP から国を確認しています…', ipSelected: country => `IP に基づき${country}を選択しました。`, ipManual: '国を手動で選択しました。', ipFailed: '国を判定できませんでした。リストから選択してください。', countryPrompt: '地球儀上の国、またはランキングから国を選択してください。',
     certificateHolders: '公開資格の保有者数', noPublicCertificates: '公開資格はありません',
-    countryRankingCertificates: '資格総数', countryRankingAccounts: 'アカウント総数',
+    countryRankingCertificates: '資格総数', countryRankingAccounts: 'アカウント総数', countryRankingSpecific: certificate => `${certificate} 保有者数`,
     countries: n => `${n} か国`, tooltipAccounts: 'ランキングアカウント', tooltipCredentialed: '資格保有アカウント', tooltipCertificates: '公開資格',
     unknownCountryEyebrow: '国の設定なし', unknownCountryTitle: '不明／未設定の国', unknownCountryAccounts: 'プロフィールで国が設定されていないアカウント',
     coverageNoteTitle: '国別集計について', coverageNoteText: 'プロフィールの国設定に基づくため、国別の資格数は実際の分布と多少異なる場合があります。',
@@ -100,7 +100,8 @@ const globalApi = {
   ipDetectedCountryCode: null,
   globeState: 'loading',
   globeError: null,
-  metric: 'certificates'
+  metric: 'certificates',
+  selectedCertificate: null
 };
 
 async function initGlobal() {
@@ -117,6 +118,7 @@ async function initGlobal() {
       renderGlobalCertificates();
       renderCountryRanking();
       populateCountrySelector();
+      populateMapMetricOptions();
       if (globalApi.countryCode) selectCountry(globalApi.countryCode);
       if (globalApi.globe) updateGlobeColors();
     }
@@ -155,6 +157,7 @@ async function initGlobal() {
         if (code && !globalApi.featureByCode.has(code)) globalApi.featureByCode.set(code, feature);
       });
       populateCountrySelector();
+      populateMapMetricOptions();
       renderCountryRanking();
       detectCountryByIp();
       initializeGlobe();
@@ -346,9 +349,40 @@ function escapeHtml(value) {
 
 function metricValue(country) {
   if (globalApi.metric === 'certificates') {
+    if (globalApi.selectedCertificate) return Number(country?.certificates?.[globalApi.selectedCertificate] || 0);
     return Object.values(country?.certificates || {}).reduce((total, count) => total + Number(count || 0), 0);
   }
   return Number(country?.[globalApi.metric] || 0);
+}
+
+function populateMapMetricOptions() {
+  const selector = document.querySelector('#map-metric');
+  const selectedValue = globalApi.selectedCertificate
+    ? `certificate:${encodeURIComponent(globalApi.selectedCertificate)}` : globalApi.metric;
+  selector.replaceChildren();
+  [
+    ['certificates', t('mapCertificatesTotal')],
+    ['accounts', t('mapAccountsTotal')]
+  ].forEach(([value, label]) => {
+    const option = document.createElement('option');
+    option.value = value;
+    option.textContent = label;
+    selector.append(option);
+  });
+  const certificateGroup = document.createElement('optgroup');
+  certificateGroup.label = t('mapCertificateLabel');
+  const certificates = globalApi.latest?.certificates || {};
+  Object.keys(certificates)
+    .sort((a, b) => Number(certificates[b]) - Number(certificates[a]) || a.localeCompare(b))
+    .forEach(certificate => {
+      const option = document.createElement('option');
+      option.value = `certificate:${encodeURIComponent(certificate)}`;
+      option.textContent = certificate;
+      certificateGroup.append(option);
+    });
+  selector.append(certificateGroup);
+  if (!Object.prototype.hasOwnProperty.call(certificates, globalApi.selectedCertificate)) globalApi.selectedCertificate = null;
+  selector.value = Array.from(selector.options).some(option => option.value === selectedValue) ? selectedValue : globalApi.metric;
 }
 
 function renderCountryRanking() {
@@ -389,7 +423,8 @@ function renderCountryRanking() {
   });
   document.querySelector('#ranking-count').textContent = t('countries')(globalNumber.format(ranking.length));
   document.querySelector('#country-ranking-title').textContent = globalApi.metric === 'accounts'
-    ? t('countryRankingAccounts') : t('countryRankingCertificates');
+    ? t('countryRankingAccounts')
+    : globalApi.selectedCertificate ? t('countryRankingSpecific')(globalApi.selectedCertificate) : t('countryRankingCertificates');
 }
 
 function selectCountry(code, coordinates) {
@@ -442,7 +477,8 @@ function updateSelectedCountryRank() {
   document.querySelector('#country-global-rank').textContent = rank >= 0
     ? `#${globalNumber.format(rank + 1)}` : t('notRanked');
   document.querySelector('#country-rank-metric').textContent = globalApi.metric === 'accounts'
-    ? t('rankMetricAccounts') : t('rankMetricCertificates');
+    ? t('rankMetricAccounts')
+    : globalApi.selectedCertificate ? t('rankMetricSpecific')(globalApi.selectedCertificate) : t('rankMetricCertificates');
 }
 
 function colorFor(value, maximum) {
@@ -465,7 +501,8 @@ function polygonTooltip(feature) {
   const code = countryCode(feature);
   const country = globalApi.latest.countries?.[code];
   const amount = metricValue(country);
-  const label = globalApi.metric === 'accounts' ? t('tooltipAccounts') : t('tooltipCertificates');
+  const label = globalApi.metric === 'accounts' ? t('tooltipAccounts')
+    : globalApi.selectedCertificate ? t('tooltipCertificateSpecific')(globalApi.selectedCertificate) : t('tooltipCertificates');
   return `<b>${escapeHtml(countryName(feature, code))}</b><br>${globalNumber.format(amount)} ${label}`;
 }
 
@@ -519,7 +556,13 @@ function initializeGlobe() {
 
   const metricSelector = document.querySelector('#map-metric');
   metricSelector.addEventListener('change', () => {
-    globalApi.metric = metricSelector.value;
+    if (metricSelector.value.startsWith('certificate:')) {
+      globalApi.metric = 'certificates';
+      globalApi.selectedCertificate = decodeURIComponent(metricSelector.value.slice('certificate:'.length));
+    } else {
+      globalApi.metric = metricSelector.value;
+      globalApi.selectedCertificate = null;
+    }
     renderCountryRanking();
     updateGlobeColors();
     updateSelectedCountryRank();
