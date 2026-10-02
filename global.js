@@ -15,7 +15,7 @@ const translations = {
     mapCertificatesTotal: 'Certificate total', mapAccountsTotal: 'Account total',
     globeHelp: 'Drag to rotate · Scroll to zoom', globeAria: 'Interactive globe colored by public OffSec account and certificate counts',
     loadingGlobe: 'Loading globe and country statistics…', globeReady: 'Globe ready · Drag to rotate, scroll to zoom, select a country for details',
-    fewer: 'Fewer', more: 'More', countryData: 'Country details', globalRankLabel: 'Global rank', rankMetricCertificates: 'by certificate total', rankMetricAccounts: 'by account total', notRanked: 'Not ranked', countryPickerLabel: 'Find a country or region', countryPickerPlaceholder: 'Choose a country or region…', countryPrompt: 'Select a country on the globe or choose one from the ranking.',
+    fewer: 'Fewer', more: 'More', countryData: 'Country details', globalRankLabel: 'Global rank', rankMetricCertificates: 'by certificate total', rankMetricAccounts: 'by account total', notRanked: 'Not ranked', countryPickerLabel: 'Find a country or region', countryPickerPlaceholder: 'Choose a country or region…', ipLookupPrefix: 'For IP-based country selection, this page queries', ipLookupSuffix: '; the service receives your public IP.', ipDetecting: 'Detecting country from IP…', ipSelected: country => `Country preselected: ${country}.`, ipManual: 'Country selected manually.', ipFailed: 'Could not detect your country. Choose it from the list.', countryPrompt: 'Select a country on the globe or choose one from the ranking.',
     certificateHolders: 'Public certificate holders', noPublicCertificates: 'No public certificates listed',
     countryRankingCertificates: 'Certificate total', countryRankingAccounts: 'Account total',
     countries: n => `${n} countries`, tooltipAccounts: 'leaderboard accounts', tooltipCredentialed: 'accounts with certificates', tooltipCertificates: 'public certificates',
@@ -44,7 +44,7 @@ const translations = {
     mapCertificatesTotal: '證照總數', mapAccountsTotal: '帳號總數',
     globeHelp: '拖曳旋轉 · 滾輪縮放', globeAria: '依 OffSec 公開帳號與證照持有人數著色的互動式地球',
     loadingGlobe: '正在載入地球與國家統計…', globeReady: '地球已載入 · 拖曳旋轉，滾輪縮放，點選國家查看資料',
-    fewer: '較少', more: '較多', countryData: '國家資料', globalRankLabel: '全球排名', rankMetricCertificates: '依證照總數排名', rankMetricAccounts: '依帳號總數排名', notRanked: '尚無排名', countryPickerLabel: '尋找國家或地區', countryPickerPlaceholder: '選擇國家或地區…', countryPrompt: '在地球上選一個國家，或從排行挑選。',
+    fewer: '較少', more: '較多', countryData: '國家資料', globalRankLabel: '全球排名', rankMetricCertificates: '依證照總數排名', rankMetricAccounts: '依帳號總數排名', notRanked: '尚無排名', countryPickerLabel: '尋找國家或地區', countryPickerPlaceholder: '選擇國家或地區…', ipLookupPrefix: 'IP 自動選國會查詢', ipLookupSuffix: '；該服務會收到你的公開 IP。', ipDetecting: '正在依 IP 判斷國家…', ipSelected: country => `已依 IP 預選：${country}`, ipManual: '已手動選擇國家。', ipFailed: '無法判斷國家，請從下拉選單選擇。', countryPrompt: '在地球上選一個國家，或從排行挑選。',
     certificateHolders: '公開證照持有人數', noPublicCertificates: '尚無列出公開證照',
     countryRankingCertificates: '證照總數', countryRankingAccounts: '帳號總數',
     countries: n => `${n} 個國家`, tooltipAccounts: '排行榜帳號', tooltipCredentialed: '至少一張證照', tooltipCertificates: '張公開證照',
@@ -73,7 +73,7 @@ const translations = {
     mapCertificatesTotal: '資格総数', mapAccountsTotal: 'アカウント総数',
     globeHelp: 'ドラッグで回転 · スクロールでズーム', globeAria: 'OffSec 公開アカウントと資格数を色で示すインタラクティブ地球儀',
     loadingGlobe: '地球儀と国別統計を読み込み中…', globeReady: '地球儀を表示しました · ドラッグで回転、スクロールでズーム、国を選択して詳細を表示',
-    fewer: '少ない', more: '多い', countryData: '国別データ', globalRankLabel: '世界ランキング', rankMetricCertificates: '資格総数順', rankMetricAccounts: 'アカウント総数順', notRanked: 'ランキング対象外', countryPickerLabel: '国・地域を検索', countryPickerPlaceholder: '国・地域を選択…', countryPrompt: '地球儀上の国、またはランキングから国を選択してください。',
+    fewer: '少ない', more: '多い', countryData: '国別データ', globalRankLabel: '世界ランキング', rankMetricCertificates: '資格総数順', rankMetricAccounts: 'アカウント総数順', notRanked: 'ランキング対象外', countryPickerLabel: '国・地域を検索', countryPickerPlaceholder: '国・地域を選択…', ipLookupPrefix: 'IP による国の自動選択では', ipLookupSuffix: 'に問い合わせます。このサービスには公開 IP が送信されます。', ipDetecting: 'IP から国を確認しています…', ipSelected: country => `IP に基づき${country}を選択しました。`, ipManual: '国を手動で選択しました。', ipFailed: '国を判定できませんでした。リストから選択してください。', countryPrompt: '地球儀上の国、またはランキングから国を選択してください。',
     certificateHolders: '公開資格の保有者数', noPublicCertificates: '公開資格はありません',
     countryRankingCertificates: '資格総数', countryRankingAccounts: 'アカウント総数',
     countries: n => `${n} か国`, tooltipAccounts: 'ランキングアカウント', tooltipCredentialed: '資格保有アカウント', tooltipCertificates: '公開資格',
@@ -95,6 +95,9 @@ const globalApi = {
   featureByCode: new Map(),
   latest: null,
   countryCode: null,
+  manuallySelectedCountry: false,
+  ipDetectionState: 'idle',
+  ipDetectedCountryCode: null,
   metric: 'certificates'
 };
 
@@ -119,6 +122,7 @@ async function initGlobal() {
   applyLanguage();
   const countrySelector = document.querySelector('#country-selector');
   countrySelector.addEventListener('change', () => {
+    markManualCountrySelection();
     const code = countrySelector.value;
     if (!code) {
       clearCountrySelection();
@@ -150,10 +154,12 @@ async function initGlobal() {
       });
       populateCountrySelector();
       renderCountryRanking();
+      detectCountryByIp();
       initializeGlobe();
     } catch (error) {
       populateCountrySelector();
       renderCountryRanking();
+      detectCountryByIp();
       document.querySelector('#globe-status').textContent = t('globeError')(error.message);
     }
   } catch (error) {
@@ -189,7 +195,57 @@ function applyLanguage() {
   document.querySelector('meta[property="og:locale"]').content = currentLanguage === 'zh-Hant' ? 'zh_TW' : currentLanguage === 'ja' ? 'ja_JP' : 'en_US';
   document.querySelector('#global-snapshot-count').textContent = t('loadingHistory');
   document.querySelector('#globe-status').textContent = t('loadingGlobe');
+  renderIpStatus();
   if (globalApi.latest && window.globalHistorySnapshots) renderGlobalSummary(window.globalHistorySnapshots);
+}
+
+function renderIpStatus() {
+  const status = document.querySelector('#ip-country-status');
+  if (!status) return;
+  if (globalApi.ipDetectionState === 'detecting') status.textContent = t('ipDetecting');
+  else if (globalApi.ipDetectionState === 'selected' && globalApi.ipDetectedCountryCode) {
+    const code = globalApi.ipDetectedCountryCode;
+    status.textContent = t('ipSelected')(countryName(globalApi.featureByCode.get(code), code));
+  } else if (globalApi.ipDetectionState === 'manual') status.textContent = t('ipManual');
+  else if (globalApi.ipDetectionState === 'failed') status.textContent = t('ipFailed');
+  else status.textContent = '';
+}
+
+function markManualCountrySelection() {
+  globalApi.manuallySelectedCountry = true;
+  globalApi.ipDetectionState = 'manual';
+  renderIpStatus();
+}
+
+async function detectCountryByIp() {
+  if (globalApi.manuallySelectedCountry) return;
+  globalApi.ipDetectionState = 'detecting';
+  renderIpStatus();
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), 5000);
+  try {
+    const response = await fetch('https://ipapi.co/country/', { cache: 'no-store', signal: controller.signal });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const code = (await response.text()).trim().toUpperCase();
+    if (!/^[A-Z]{2}$/.test(code) || isUnknownCountry(code)) throw new Error('No country code');
+    if (globalApi.manuallySelectedCountry) {
+      renderIpStatus();
+      return;
+    }
+    globalApi.ipDetectedCountryCode = code;
+    populateCountrySelector([code]);
+    const feature = globalApi.featureByCode.get(code);
+    const props = feature?.properties;
+    const coords = props ? { lat: props.LABEL_Y || 0, lng: props.LABEL_X || 0 } : null;
+    selectCountry(code, coords);
+    globalApi.ipDetectionState = 'selected';
+    renderIpStatus();
+  } catch (_) {
+    if (!globalApi.manuallySelectedCountry) globalApi.ipDetectionState = 'failed';
+    renderIpStatus();
+  } finally {
+    window.clearTimeout(timeout);
+  }
 }
 
 function renderGlobalSummary(snapshots) {
@@ -233,7 +289,7 @@ function countryName(feature, fallbackCode = null) {
   return feature?.properties?.ADMIN || feature?.properties?.NAME_EN || code || 'Unknown';
 }
 
-function populateCountrySelector() {
+function populateCountrySelector(extraCodes = []) {
   const selector = document.querySelector('#country-selector');
   if (!selector || !globalApi.latest) return;
   const selectedCode = globalApi.countryCode || '';
@@ -242,7 +298,8 @@ function populateCountrySelector() {
   placeholder.textContent = t('countryPickerPlaceholder');
   const codes = new Set([
     ...globalApi.features.map(countryCode),
-    ...Object.keys(globalApi.latest.countries || {})
+    ...Object.keys(globalApi.latest.countries || {}),
+    ...extraCodes
   ]);
   codes.delete(null);
   const names = [...codes]
@@ -306,6 +363,7 @@ function renderCountryRanking() {
     count.textContent = globalNumber.format(metricValue(value));
     button.append(rank, name, count);
     button.addEventListener('click', () => {
+      markManualCountrySelection();
       const coords = feature?.properties;
       selectCountry(code, coords ? { lat: coords.LABEL_Y || 0, lng: coords.LABEL_X || 0 } : null);
       if (globalApi.globe && coords) {
@@ -417,7 +475,10 @@ function initializeGlobe() {
     .polygonAltitude(0.002)
     .polygonLabel(polygonTooltip)
     .polygonsTransitionDuration(300)
-    .onPolygonClick((feature, _event, coords) => selectCountry(countryCode(feature), coords));
+    .onPolygonClick((feature, _event, coords) => {
+      markManualCountrySelection();
+      selectCountry(countryCode(feature), coords);
+    });
 
   const controls = globalApi.globe.controls();
   controls.enableDamping = true;
@@ -425,6 +486,11 @@ function initializeGlobe() {
   controls.autoRotate = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   controls.autoRotateSpeed = 0.28;
   globalApi.globe.pointOfView({ lat: 18, lng: 5, altitude: 2.15 }, 0);
+  const selectedFeature = globalApi.featureByCode.get(globalApi.countryCode);
+  if (selectedFeature) {
+    const props = selectedFeature.properties;
+    globalApi.globe.pointOfView({ lat: props.LABEL_Y || 0, lng: props.LABEL_X || 0, altitude: 1.5 }, 0);
+  }
   updateGlobeColors();
   document.querySelector('#globe-status').textContent = t('globeReady');
 

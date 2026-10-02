@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="global.css?v=20261002-country-layout">
   <script src="https://cdn.jsdelivr.net/npm/globe.gl@2.46.2/dist/globe.gl.min.js" defer></script>
-  <script src="global.js?v=20261002-country-ranking" defer></script>
+  <script src="global.js?v=20261002-ip-country" defer></script>
 </head>
 <body class="global-page">
   <header class="topbar">
@@ -78,6 +78,8 @@
             <select id="country-selector" aria-label="Choose a country or region" data-i18n-aria="countryPickerLabel">
               <option value="" data-i18n="countryPickerPlaceholder">Choose a country or region…</option>
             </select>
+            <p class="ip-country-note"><span data-i18n="ipLookupPrefix">For IP-based country selection, this page queries</span> <a href="https://ipapi.co/" target="_blank" rel="noreferrer">ipapi.co</a><span data-i18n="ipLookupSuffix">; the service receives your public IP.</span></p>
+            <span id="ip-country-status" class="ip-country-status" aria-live="polite"></span>
             <div id="country-prompt" class="country-prompt" data-i18n="countryPrompt">Select a country on the globe or choose one from the ranking.</div>
             <div id="country-detail" hidden>
               <span id="country-code" class="country-code">—</span>
