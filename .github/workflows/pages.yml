@@ -33,9 +33,10 @@ jobs:
         run: |
           mkdir -p _site/data
           python scripts/render_site.py --output _site/index.html
-          cp style.css app.js _site/
+          python scripts/render_global_site.py --output _site/global.html
+          cp style.css global.css app.js global.js _site/
           cp -R assets _site/assets
-          cp data/snapshots.json _site/data/
+          cp data/snapshots.json data/global-snapshots.json _site/data/
           cp google4d70fe6121c24cdc.html _site/
           touch _site/.nojekyll
       - name: Upload site

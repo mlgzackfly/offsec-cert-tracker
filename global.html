@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#182d32">
+  <meta name="description" content="Explore public OffSec certificate counts worldwide on an interactive, rotatable globe.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://mlgzackfly.github.io/offsec-tw-cert-tracker/global.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:site_name" content="OffSec Certificate Tracker">
+  <meta property="og:title" content="OffSec Global Certificate Map and Statistics">
+  <meta property="og:description" content="Explore public OffSec certificate counts worldwide on an interactive, rotatable globe.">
+  <meta property="og:url" content="https://mlgzackfly.github.io/offsec-tw-cert-tracker/global.html">
+  <title>OffSec Global Certificate Map and Statistics</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="global.css?v=20261002-country-picker">
+  <script src="https://cdn.jsdelivr.net/npm/globe.gl@2.46.2/dist/globe.gl.min.js" defer></script>
+  <script src="global.js?v=20261002-country-picker" defer></script>
+</head>
+<body class="global-page">
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="OffSec Certificate Tracker home">
+      <span class="brand-mark">O</span>
+      <span>OFFSEC <b>/</b> GLOBAL</span>
+    </a>
+    <div class="topbar-meta"><a class="page-switch" href="./" data-i18n="taiwanLink">Taiwan edition ↗</a><span class="topbar-divider"></span><span data-i18n="globalLeaderboard">Global public leaderboard</span><label class="language-control"><span class="sr-only" data-i18n="languageLabel">Language</span><select id="language-selector" aria-label="Language" data-i18n-aria="languageLabel"><option value="en">EN</option><option value="zh-Hant">繁中</option><option value="ja">日本語</option></select></label></div>
+  </header>
+
+  <main>
+    <section class="hero global-hero">
+      <div class="hero-copy">
+        <p class="eyebrow" data-i18n="heroEyebrow">Worldwide · Public leaderboard data</p>
+        <h1 data-i18n="heroTitle">OffSec Global<br><span>Certificate Map</span></h1>
+        <p class="hero-lede" data-i18n="heroLede">Explore public certificate counts from the global leaderboard. Rotate the globe and select a country to see its breakdown.</p>
+      </div>
+      <aside class="hero-stamp" aria-label="Snapshot update information" data-i18n-aria="stampAria">
+        <span class="stamp-label" data-i18n="latestSnapshot">Latest global snapshot</span>
+        <strong id="global-snapshot-date">—</strong>
+        <span class="stamp-caption" data-i18n="updateSchedule">Taipei time · Updated twice daily</span>
+        <span class="stamp-index">GLOBAL <i>／</i> ALL TIME</span>
+      </aside>
+      <div class="hero-bottom"><span>OFFSEC WORLDWIDE COMMUNITY INDEX</span><span id="global-snapshot-count">Loading history…</span></div>
+    </section>
+
+    <section class="metrics global-metrics" aria-label="OffSec global leaderboard statistics" data-i18n-aria="metricsLabel">
+      <article class="metric metric-dark"><div class="metric-label"><span class="metric-number">01</span><h2 data-i18n="totalAccounts">Global leaderboard accounts</h2></div><strong id="global-total-count">—</strong><p><span data-i18n="accountsCaption">Fetched and deduplicated</span> <span id="global-account-reconciliation"></span></p></article>
+      <article class="metric metric-accent"><div class="metric-label"><span class="metric-number">02</span><h2 data-i18n="credentialedAccounts">Accounts with at least one certificate</h2></div><strong id="global-credentialed-count">—</strong><p data-i18n="credentialedCaption">Leaderboard accounts with public certificates</p></article>
+      <article class="metric metric-light"><div class="metric-label"><span class="metric-number">03</span><h2 data-i18n="countriesWithAccounts">Countries / regions with accounts</h2></div><strong id="global-country-count">—</strong><p><span id="global-unknown-count">—</span> <span data-i18n="unknownCountryCaption">accounts without a country</span></p></article>
+      <article class="metric metric-purple"><div class="metric-label"><span class="metric-number">04</span><h2 data-i18n="certificateTypes">Public certificate types</h2></div><strong id="global-cert-count">—</strong><p data-i18n="certificateTypesCaption">Aggregated from the public global leaderboard</p></article>
+    </section>
+
+    <section class="world-section" aria-labelledby="world-title">
+      <div class="section-intro">
+        <div><p class="eyebrow" data-i18n="globeEyebrow">Interactive globe</p><h2 id="world-title" data-i18n="worldTitle">Where are certificate holders?</h2></div>
+        <p data-i18n="worldDescription">Country colors show the selected total. Select a country or ranking entry for details.</p>
+      </div>
+      <div class="world-dashboard">
+        <article class="world-map-card">
+          <div class="world-map-toolbar">
+            <label for="map-metric" data-i18n="globeMetric">Show on globe</label>
+            <select id="map-metric" aria-label="Choose a statistic to show on the globe" data-i18n-aria="globeMetricAria">
+              <option value="certificates" selected data-i18n="mapCertificatesTotal">Certificate total</option>
+              <option value="accounts" data-i18n="mapAccountsTotal">Account total</option>
+            </select>
+            <span class="globe-help" data-i18n="globeHelp">Drag to rotate · Scroll to zoom</span>
+          </div>
+          <div id="world-globe" class="world-globe" role="img" aria-label="Interactive globe colored by public OffSec account and certificate counts" data-i18n-aria="globeAria"></div>
+          <p id="globe-status" class="globe-status">Loading globe and country statistics…</p>
+          <div class="map-legend"><span data-i18n="fewer">Fewer</span><i></i><span data-i18n="more">More</span><span id="map-legend-max">—</span></div>
+        </article>
+
+        <aside class="world-side">
+          <article class="country-detail-card" aria-live="polite">
+            <p class="eyebrow" data-i18n="countryData">Country details</p>
+            <label class="country-picker-label" for="country-selector" data-i18n="countryPickerLabel">Find a country or region</label>
+            <select id="country-selector" aria-label="Choose a country or region" data-i18n-aria="countryPickerLabel">
+              <option value="" data-i18n="countryPickerPlaceholder">Choose a country or region…</option>
+            </select>
+            <div id="country-prompt" class="country-prompt" data-i18n="countryPrompt">Select a country on the globe or choose one from the ranking.</div>
+            <div id="country-detail" hidden>
+              <span id="country-code" class="country-code">—</span>
+              <h3 id="country-name">—</h3>
+              <div class="country-stats">
+                <div><span data-i18n="allAccounts">Leaderboard accounts</span><strong id="country-accounts">—</strong></div>
+                <div><span data-i18n="credentialedAccountsShort">With at least one certificate</span><strong id="country-credentialed">—</strong></div>
+              </div>
+              <h4 data-i18n="certificateHolders">Public certificate holders</h4>
+              <ul id="country-cert-list" class="country-cert-list"></ul>
+            </div>
+          </article>
+          <article class="country-ranking-card">
+            <div class="ranking-heading"><div><p class="eyebrow">COUNTRY RANKING</p><h3 id="country-ranking-title">Certificate total</h3></div><span id="ranking-count">—</span></div>
+            <ol id="country-ranking" class="country-ranking"></ol>
+          </article>
+          <article class="country-unknown-card">
+            <p class="eyebrow" data-i18n="unknownCountryEyebrow">COUNTRY NOT SET</p>
+            <h3 data-i18n="unknownCountryTitle">Unknown / country not set</h3>
+            <div class="unknown-country-count"><strong id="unknown-country-accounts">—</strong><span data-i18n="unknownCountryAccounts">accounts without a country in their profile</span></div>
+          </article>
+        </aside>
+      </div>
+      <aside class="country-coverage-note" aria-label="Country-level data note" data-i18n-aria="coverageNoteTitle">
+        <strong data-i18n="coverageNoteTitle">Country-level estimate</strong>
+        <p data-i18n="coverageNoteText">Because country values come from profile settings, certificate counts by country may differ slightly from the actual distribution.</p>
+      </aside>
+    </section>
+
+    <section class="global-cert-section" aria-labelledby="global-cert-title">
+      <div class="section-intro cert-intro">
+        <div><p class="eyebrow" data-i18n="certificateCatalog">Certificate directory</p><h2 id="global-cert-title" data-i18n="certificateTitle">How many people hold each certificate?</h2></div>
+        <p><span id="global-cert-section-count">—</span> <span data-i18n="certificateCountCaption">public certificates · each account is counted once per certificate</span></p>
+      </div>
+      <div id="global-cert-grid" class="cert-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="data-note" aria-label="Data notes" data-i18n-aria="dataNotes">
+      <div class="note-mark">i</div>
+      <div><h2 data-i18n="dataTitle">About these statistics</h2><p data-i18n="dataDescription">Data comes from the public OffSec Portal global leaderboard. Pages are aggregated by leaderboard account; only global and country totals are stored, not account-level records. Certificate counts reflect public leaderboard accounts and may differ from an official deduplicated holder list. Accounts without a country are included in the global total. Country boundaries: Natural Earth 1:110m. Interactive globe: Globe.GL.</p>
+      <a href="https://portal.offsec.com/services/competitions/v1/leaderboard/global?limit=1000&amp;offset=0&amp;timeFilter=ALL_TIME" target="_blank" rel="noreferrer" data-i18n="sourceLink">View OffSec Portal source ↗</a></div>
+    </section>
+  </main>
+
+  <footer><a class="footer-brand" href="./">OFFSEC / GLOBAL</a><span><a class="footer-link" href="./" data-i18n="taiwanLink">Taiwan edition</a><i>·</i> Natural Earth boundaries <i>·</i> <a class="footer-link" href="https://github.com/mlgzackfly/offsec-tw-cert-tracker" target="_blank" rel="noreferrer" data-i18n="githubProject">GitHub project ↗</a><i>·</i> <span data-i18n="taipeiTime">Times shown in Taipei time</span></span></footer>
+</body>
+</html>

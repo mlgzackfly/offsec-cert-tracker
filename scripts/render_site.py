@@ -154,6 +154,7 @@ def render(history, output_path):
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         f'  <url><loc>{SITE_URL}</loc><lastmod>{latest["date"]}</lastmod><changefreq>daily</changefreq></url>\n'
+        f'  <url><loc>{SITE_URL}global.html</loc><lastmod>{latest["date"]}</lastmod><changefreq>daily</changefreq></url>\n'
         '</urlset>\n'
     )
     (output_path.parent / "sitemap.xml").write_text(sitemap, encoding="utf-8")
