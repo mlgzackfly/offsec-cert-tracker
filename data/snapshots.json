@@ -791,6 +791,119 @@
         }
       ],
       "source": "https://portal.offsec.com/services/competitions/v1/leaderboard/global"
+    },
+    {
+      "date": "2026-10-06",
+      "total_accounts": 995,
+      "accounts_with_credentials": 341,
+      "accounts_without_credentials": 654,
+      "certificates": {
+        "KLCP": 9,
+        "OSAI": 2,
+        "OSAI+": 2,
+        "OSCC-SEC": 20,
+        "OSCC-SJD": 3,
+        "OSCE3": 20,
+        "OSCP": 268,
+        "OSCP+": 121,
+        "OSDA": 41,
+        "OSED": 31,
+        "OSEE": 4,
+        "OSEP": 81,
+        "OSIR": 15,
+        "OSMR": 1,
+        "OSTH": 20,
+        "OSWA": 30,
+        "OSWE": 69,
+        "OSWP": 31
+      },
+      "certificate_badges": {
+        "KLCP": "https://static.offsec.com/media/lms/credentials/KLCP_Acclaim_Badge.svg",
+        "OSAI": "https://static.offsec.com/media/lms/content_tags/OSAI_Acclaim_Badge.png",
+        "OSAI+": "https://static.offsec.com/media/lms/content_tags/OSAIplus_Acclaim_Badge.png",
+        "OSCC-SEC": "https://static.offsec.com/media/lms/credentials/OSCC_Acclaim_Badge.svg",
+        "OSCC-SJD": "https://static.offsec.com/media/lms/credentials/OSCC_SJD-100_Acclaim_Badge.svg",
+        "OSCE3": "https://static.offsec.com/media/lms/credentials/OSCE3_Acclaim_Badge.svg",
+        "OSCP": "https://static.offsec.com/media/lms/credentials/OSCP_Acclaim_Badge.svg",
+        "OSCP+": "https://static.offsec.com/media/lms/credentials/OSCP%2B_Acclaim_Badge.svg",
+        "OSDA": "https://static.offsec.com/media/lms/credentials/OSDA_Acclaim_Badge.svg",
+        "OSED": "https://static.offsec.com/media/lms/credentials/OSED_Acclaim_Badge.svg",
+        "OSEE": "https://static.offsec.com/media/lms/credentials/OSEE_Acclaim_Badge.svg",
+        "OSEP": "https://static.offsec.com/media/lms/credentials/OSEP_Acclaim_Badge.svg",
+        "OSIR": "https://static.offsec.com/media/lms/credentials/OSIR_Acclaim_Badge.svg",
+        "OSMR": "https://static.offsec.com/media/lms/credentials/OSMR_Acclaim_Badge.svg",
+        "OSTH": "https://static.offsec.com/media/lms/credentials/OSTH_Acclaim_Badge.svg",
+        "OSWA": "https://static.offsec.com/media/lms/credentials/OSWA_Acclaim_Badge.svg",
+        "OSWE": "https://static.offsec.com/media/lms/credentials/OSWE_Acclaim_Badge.svg",
+        "OSWP": "https://static.offsec.com/media/lms/credentials/OSWP_Acclaim_Badge.svg"
+      },
+      "top_holders": [
+        {
+          "rank": 1,
+          "username": "crazymind",
+          "profile_image": "",
+          "certificate_count": 16,
+          "certificates": [
+            "KLCP",
+            "OSCC-SEC",
+            "OSCC-SJD",
+            "OSCE3",
+            "OSCP",
+            "OSCP+",
+            "OSDA",
+            "OSED",
+            "OSEE",
+            "OSEP",
+            "OSIR",
+            "OSMR",
+            "OSTH",
+            "OSWA",
+            "OSWE",
+            "OSWP"
+          ]
+        },
+        {
+          "rank": 2,
+          "username": "jason3e7",
+          "profile_image": "",
+          "certificate_count": 13,
+          "certificates": [
+            "KLCP",
+            "OSCC-SEC",
+            "OSCE3",
+            "OSCP",
+            "OSCP+",
+            "OSDA",
+            "OSED",
+            "OSEP",
+            "OSIR",
+            "OSTH",
+            "OSWA",
+            "OSWE",
+            "OSWP"
+          ]
+        },
+        {
+          "rank": 3,
+          "username": "axwl03",
+          "profile_image": "",
+          "certificate_count": 11,
+          "certificates": [
+            "OSCC-SEC",
+            "OSCE3",
+            "OSCP",
+            "OSDA",
+            "OSED",
+            "OSEP",
+            "OSIR",
+            "OSTH",
+            "OSWA",
+            "OSWE",
+            "OSWP"
+          ]
+        }
+      ],
+      "source": "https://portal.offsec.com/services/competitions/v1/leaderboard/global"
     }
   ]
 }
