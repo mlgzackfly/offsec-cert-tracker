@@ -907,9 +907,9 @@
     },
     {
       "date": "2026-10-07",
-      "total_accounts": 996,
+      "total_accounts": 997,
       "accounts_with_credentials": 342,
-      "accounts_without_credentials": 654,
+      "accounts_without_credentials": 655,
       "certificates": {
         "KLCP": 9,
         "OSAI": 2,
