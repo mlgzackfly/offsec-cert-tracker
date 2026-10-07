@@ -53,12 +53,12 @@
 
     <section class="metrics" aria-label="台灣 OffSec 帳號統計">
       <article class="metric metric-dark">
-        <div class="metric-label"><span class="metric-number">01</span><h2>OffSec 台灣帳號總數</h2></div>
+        <div class="metric-label"><span class="metric-number">01</span><h2>OffSec 台灣帳號</h2></div>
         <div class="metric-value-line"><strong id="total-count">—</strong><span class="metric-delta" id="delta-accounts" aria-label="較前一日變化">—</span></div>
         <p>OffSec 全球排行榜中，國家標記為 TW 的帳號</p>
       </article>
       <article class="metric metric-accent">
-        <div class="metric-label"><span class="metric-number">02</span><h2>至少擁有一張證照</h2></div>
+        <div class="metric-label"><span class="metric-number">02</span><h2>擁有一張以上證照的帳號</h2></div>
         <div class="metric-value-line"><strong id="credentialed-count">—</strong><span class="metric-delta" id="delta-credentialed" aria-label="較前一日變化">—</span></div>
         <p><span id="credentialed-share">—</span> 的台灣排行榜帳號有公開證照</p>
       </article>
@@ -67,7 +67,7 @@
     <section class="trend-section" aria-labelledby="trend-title">
       <div class="section-intro">
         <div><p class="eyebrow">每日快照</p><h2 id="trend-title">持有人數趨勢</h2></div>
-        <p>依日期呈現持有人數變化，橫軸每 30 天標示一個刻度。</p>
+        <p>依日期呈現至少追蹤到的持有人數，橫軸每 30 天標示一個刻度。</p>
       </div>
       <div class="trend-card">
         <div class="trend-toolbar">
@@ -98,7 +98,7 @@
 
     <section class="data-note" aria-label="資料說明">
       <div class="note-mark">i</div>
-      <div><h2>資料怎麼統計</h2><p>數字來自 OffSec Portal 公開排行榜 API。證照人數以排行榜帳號為計數單位，同一帳號在同一證照只計一次；網站以「人」呈現，並非 OffSec 官方去重後的個人名冊。同一帳號可同時擁有多張證照。帳號狀態、國家設定或 API 變動都可能影響結果。</p>
+      <div><h2>資料怎麼統計</h2><p>數字來自 OffSec Portal 公開排行榜 API，顯示「至少」是因為排行榜資料可能不完整或變動。證照人數以排行榜帳號為計數單位，同一帳號在同一證照只計一次；網站以「人」呈現，並非 OffSec 官方去重後的個人名冊。同一帳號可同時擁有多張證照。帳號狀態、國家設定或 API 變動都可能影響結果。</p>
       <a href="https://portal.offsec.com/services/competitions/v1/leaderboard/global?limit=1000&amp;offset=0&amp;timeFilter=ALL_TIME&amp;countryCode=TW" target="_blank" rel="noreferrer">查看 OffSec Portal 資料來源 ↗</a></div>
     </section>
   </main>

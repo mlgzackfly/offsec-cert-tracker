@@ -2,6 +2,13 @@ const numberFormat = new Intl.NumberFormat('zh-TW');
 let snapshots = [];
 let latest = {};
 
+function setAtLeast(element, value, unit = '') {
+  const prefix = document.createElement('span');
+  prefix.className = 'minimum-prefix';
+  prefix.textContent = '至少';
+  element.replaceChildren(prefix, document.createTextNode(` ${value}${unit}`));
+}
+
 async function init() {
   try {
     const response = await fetch('./data/snapshots.json', { cache: 'no-store' });
@@ -24,8 +31,8 @@ function render() {
 
   document.querySelector('#snapshot-date').textContent = latest.date || '—';
   document.querySelector('#snapshot-count').textContent = `已累積 ${numberFormat.format(snapshots.length)} 日快照`;
-  document.querySelector('#total-count').textContent = numberFormat.format(latest.total_accounts || 0);
-  document.querySelector('#credentialed-count').textContent = numberFormat.format(latest.accounts_with_credentials || 0);
+  setAtLeast(document.querySelector('#total-count'), numberFormat.format(latest.total_accounts || 0));
+  setAtLeast(document.querySelector('#credentialed-count'), numberFormat.format(latest.accounts_with_credentials || 0));
   renderMetricDeltas();
   const share = latest.total_accounts
     ? ((latest.accounts_with_credentials / latest.total_accounts) * 100).toFixed(1)
@@ -184,7 +191,7 @@ function renderCertificateCards(certs, badges, previous) {
     const count = document.createElement('div');
     count.className = 'cert-count';
     const value = document.createElement('strong');
-    value.textContent = numberFormat.format(latest.certificates[cert]);
+    setAtLeast(value, numberFormat.format(latest.certificates[cert]));
     const label = document.createElement('span');
     label.textContent = '人';
     count.append(value, label);
@@ -224,7 +231,7 @@ function drawChart() {
     count: (snapshot.certificates || {})[cert] || 0
   }));
   const current = values[values.length - 1];
-  document.querySelector('#chart-current').textContent = `${numberFormat.format(current?.count || 0)} 人`;
+  setAtLeast(document.querySelector('#chart-current'), numberFormat.format(current?.count || 0), ' 人');
 
   const width = 900, height = 300, left = 50, right = 16, top = 18, bottom = 34;
   const maximum = Math.max(...values.map(point => point.count), 1);

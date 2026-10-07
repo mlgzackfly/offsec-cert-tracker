@@ -4,7 +4,7 @@ const translations = {
     heroEyebrow: 'Worldwide · Public leaderboard data', heroTitle: 'OffSec Global<br><span>Certificate Map</span>',
     heroLede: 'Explore public certificate counts from the global leaderboard. Rotate the globe and select a country to see its breakdown.',
     latestSnapshot: 'Latest global snapshot', updateSchedule: 'Taipei time · Updated twice daily', loadingHistory: 'Loading history…',
-    snapshots: n => `${n} daily global snapshots`, metricsLabel: 'OffSec global leaderboard statistics',
+    atLeast: 'At least', snapshots: n => `${n} daily global snapshots`, metricsLabel: 'OffSec global leaderboard statistics',
     totalAccounts: 'Global leaderboard accounts', accountsCaption: 'Fetched and deduplicated', reported: n => `(API reports ${n})`,
     credentialedAccounts: 'Accounts with at least one certificate', credentialedCaption: 'Leaderboard accounts with public certificates',
     countriesWithAccounts: 'Countries / regions with accounts', unknownCountryCaption: 'accounts without a country',
@@ -33,7 +33,7 @@ const translations = {
     heroEyebrow: 'Worldwide · 公開排行榜資料', heroTitle: 'OffSec 全球<br><span>證照地圖</span>',
     heroLede: '瀏覽全球公開證照統計，旋轉地球並選擇國家查看分布。',
     latestSnapshot: '最新全球快照', updateSchedule: '台北時間 · 每日更新兩次', loadingHistory: '載入歷史資料…',
-    snapshots: n => `已累積 ${n} 日全球快照`, metricsLabel: 'OffSec 全球排行榜統計',
+    atLeast: '至少', snapshots: n => `已累積 ${n} 日全球快照`, metricsLabel: 'OffSec 全球排行榜統計',
     totalAccounts: '全球排行榜帳號', accountsCaption: '分頁取得並去重', reported: n => `（API 回報 ${n}）`,
     credentialedAccounts: '至少擁有一張證照', credentialedCaption: '排行榜帳號列有公開證照',
     countriesWithAccounts: '有帳號的國家／地區', unknownCountryCaption: '個帳號未設定國家',
@@ -62,7 +62,7 @@ const translations = {
     heroEyebrow: 'Worldwide · 公開ランキングデータ', heroTitle: 'OffSec グローバル<br><span>資格マップ</span>',
     heroLede: 'グローバルランキングの公開資格数を確認できます。地球を回転し、国を選択して内訳を表示します。',
     latestSnapshot: '最新のグローバルスナップショット', updateSchedule: '台北時間 · 毎日2回更新', loadingHistory: '履歴を読み込み中…',
-    snapshots: n => `グローバル履歴 ${n} 日分`, metricsLabel: 'OffSec グローバルランキング統計',
+    atLeast: '少なくとも', snapshots: n => `グローバル履歴 ${n} 日分`, metricsLabel: 'OffSec グローバルランキング統計',
     totalAccounts: 'グローバルランキングのアカウント数', accountsCaption: 'ページごとに取得し重複を除外', reported: n => `（API 報告値 ${n}）`,
     credentialedAccounts: '資格を1つ以上保有するアカウント', credentialedCaption: '公開資格が登録されたランキングアカウント',
     countriesWithAccounts: 'アカウントがある国・地域', unknownCountryCaption: 'アカウントは国未設定',
@@ -179,6 +179,13 @@ async function initGlobal() {
 
 function t(key) { return translations[currentLanguage][key]; }
 
+function setAtLeast(element, value, unit = '') {
+  const prefix = document.createElement('span');
+  prefix.className = 'minimum-prefix';
+  prefix.textContent = t('atLeast');
+  element.replaceChildren(prefix, document.createTextNode(` ${value}${unit}`));
+}
+
 function renderGlobeStatus() {
   const status = document.querySelector('#globe-status');
   if (!status) return;
@@ -269,13 +276,13 @@ function renderGlobalSummary(snapshots) {
   const latest = globalApi.latest;
   document.querySelector('#global-snapshot-date').textContent = latest.date || '—';
   document.querySelector('#global-snapshot-count').textContent = t('snapshots')(globalNumber.format(snapshots.length));
-  document.querySelector('#global-total-count').textContent = globalNumber.format(latest.total_accounts || 0);
+  setAtLeast(document.querySelector('#global-total-count'), globalNumber.format(latest.total_accounts || 0));
   document.querySelector('#global-account-reconciliation').textContent = latest.reported_total_accounts
     ? t('reported')(globalNumber.format(latest.reported_total_accounts)) : '';
-  document.querySelector('#global-credentialed-count').textContent = globalNumber.format(latest.accounts_with_credentials || 0);
+  setAtLeast(document.querySelector('#global-credentialed-count'), globalNumber.format(latest.accounts_with_credentials || 0));
   document.querySelector('#global-country-count').textContent = globalNumber.format(latest.countries_with_accounts || 0);
-  document.querySelector('#global-unknown-count').textContent = globalNumber.format(latest.unknown_country_accounts || 0);
-  document.querySelector('#unknown-country-accounts').textContent = globalNumber.format(unknownCountryAccounts(latest));
+  setAtLeast(document.querySelector('#global-unknown-count'), globalNumber.format(latest.unknown_country_accounts || 0));
+  setAtLeast(document.querySelector('#unknown-country-accounts'), globalNumber.format(unknownCountryAccounts(latest)));
   document.querySelector('#global-cert-count').textContent = globalNumber.format(Object.keys(latest.certificates || {}).length);
 }
 
@@ -408,7 +415,7 @@ function renderCountryRanking() {
     name.textContent = countryName(feature, code);
     const count = document.createElement('strong');
     count.className = 'country-rank-count';
-    count.textContent = globalNumber.format(metricValue(value));
+    setAtLeast(count, globalNumber.format(metricValue(value)));
     button.append(rank, name, count);
     button.addEventListener('click', () => {
       markManualCountrySelection();
@@ -436,8 +443,8 @@ function selectCountry(code, coordinates) {
   document.querySelector('#country-detail').hidden = false;
   document.querySelector('#country-code').textContent = code;
   document.querySelector('#country-name').textContent = `${code} · ${countryName(feature, code)}`;
-  document.querySelector('#country-accounts').textContent = globalNumber.format(record.accounts || 0);
-  document.querySelector('#country-credentialed').textContent = globalNumber.format(record.accounts_with_credentials || 0);
+  setAtLeast(document.querySelector('#country-accounts'), globalNumber.format(record.accounts || 0));
+  setAtLeast(document.querySelector('#country-credentialed'), globalNumber.format(record.accounts_with_credentials || 0));
   updateSelectedCountryRank();
   const certList = document.querySelector('#country-cert-list');
   certList.replaceChildren();
@@ -449,7 +456,7 @@ function selectCountry(code, coordinates) {
       const name = document.createElement('span');
       name.textContent = cert;
       const value = document.createElement('strong');
-      value.textContent = globalNumber.format(count);
+      setAtLeast(value, globalNumber.format(count));
       item.append(name, value);
       certList.append(item);
     });
@@ -503,7 +510,7 @@ function polygonTooltip(feature) {
   const amount = metricValue(country);
   const label = globalApi.metric === 'accounts' ? t('tooltipAccounts')
     : globalApi.selectedCertificate ? t('tooltipCertificateSpecific')(globalApi.selectedCertificate) : t('tooltipCertificates');
-  return `<b>${escapeHtml(countryName(feature, code))}</b><br>${globalNumber.format(amount)} ${label}`;
+  return `<b>${escapeHtml(countryName(feature, code))}</b><br><span class="minimum-prefix">${t('atLeast')}</span> ${globalNumber.format(amount)} ${label}`;
 }
 
 function updateGlobeColors() {
@@ -609,7 +616,7 @@ function renderGlobalCertificates() {
     const count = document.createElement('div');
     count.className = 'cert-count';
     const value = document.createElement('strong');
-    value.textContent = globalNumber.format(counts[cert]);
+    setAtLeast(value, globalNumber.format(counts[cert]));
     const unit = document.createElement('span');
     unit.textContent = currentLanguage === 'zh-Hant' ? '人' : currentLanguage === 'ja' ? '人' : 'holders';
     count.append(value, unit);

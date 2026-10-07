@@ -12,3 +12,4 @@
 @media(max-width:620px){.metric-value-line{gap:11px;margin-top:13px}.metric-value-line>strong{font-size:49px}.metric-delta{font-size:13px}}
 .cert-count-delta{margin-left:4px;color:#c7352f;font:700 10px var(--mono);letter-spacing:-.04em;white-space:nowrap}
 .date-gridline{stroke:#f0eee8;stroke-width:1;stroke-dasharray:2 4}.axis-date-label{fill:#9ba09a;font:9px var(--mono)}
+.minimum-prefix{font-size:.3em!important;font-family:var(--sans);font-weight:400;letter-spacing:0;opacity:.68}
