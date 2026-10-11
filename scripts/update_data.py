@@ -2,6 +2,8 @@
 """Fetch and append a daily snapshot of Taiwan OffSec leaderboard credentials."""
 import json
 import math
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from collections import Counter
@@ -14,28 +16,65 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA_FILE = ROOT / "data" / "snapshots.json"
 CHART_FILE = ROOT / "assets" / "certificate-trends.svg"
 API = "https://portal.offsec.com/services/competitions/v1/leaderboard/global"
+PAGE_SIZE = 1000
+PAGE_OVERLAP = 300
+RETRIES = 5
 
 
-def main():
+def fetch_page(offset):
     params = urllib.parse.urlencode({
-        "limit": 1000,
-        "offset": 0,
+        "limit": PAGE_SIZE,
+        "offset": offset,
         "timeFilter": "ALL_TIME",
         "countryCode": "TW",
     })
     request = urllib.request.Request(
         f"{API}?{params}", headers={"User-Agent": "Taiwan-OffSec-Cert-Tracker/1.0"}
     )
-    with urllib.request.urlopen(request, timeout=60) as response:
-        payload = json.load(response)
+    for attempt in range(RETRIES):
+        try:
+            with urllib.request.urlopen(request, timeout=60) as response:
+                return json.load(response)
+        except urllib.error.HTTPError as error:
+            if error.code not in (408, 425, 429, 500, 502, 503, 504) or attempt == RETRIES - 1:
+                raise
+            delay = int(error.headers.get("Retry-After", 0) or 0) or min(2 ** attempt, 30)
+            time.sleep(delay)
+        except (TimeoutError, urllib.error.URLError):
+            if attempt == RETRIES - 1:
+                raise
+            time.sleep(min(2 ** attempt, 30))
 
-    rows = payload.get("data")
-    if not isinstance(rows, list) or not rows:
-        raise RuntimeError("API returned no leaderboard rows; keeping previous history.")
-    # The current endpoint returns the full country result with limit=1000. Fail
-    # closed if that changes, rather than silently recording a partial snapshot.
-    if payload.get("hasNext"):
-        raise RuntimeError("API indicates more pages; refusing to save a partial snapshot.")
+
+def main():
+    rows = []
+    seen_user_ids = set()
+    expected_count = None
+    offset = 0
+
+    while True:
+        payload = fetch_page(offset)
+        page_rows = payload.get("data")
+        if not isinstance(page_rows, list) or not page_rows:
+            raise RuntimeError(f"API returned an empty or invalid Taiwan page at offset {offset}.")
+        page_count = payload.get("count")
+        if not isinstance(page_count, int) or page_count < 1:
+            raise RuntimeError("API did not provide a valid Taiwan account count.")
+        expected_count = page_count
+
+        for index, row in enumerate(page_rows):
+            account_id = row.get("userId")
+            account_id = str(account_id) if account_id is not None else f"offset:{offset + index}"
+            if account_id not in seen_user_ids:
+                seen_user_ids.add(account_id)
+                rows.append(row)
+
+        if not payload.get("hasNext"):
+            break
+        offset += PAGE_SIZE - PAGE_OVERLAP
+        if offset >= expected_count:
+            raise RuntimeError("API still reports another Taiwan page after its reported account count.")
+        time.sleep(0.15)
 
     cert_counts = Counter()
     cert_badges = {}
@@ -81,7 +120,8 @@ def main():
 
     snapshot = {
         "date": datetime.now(ZoneInfo("Asia/Taipei")).date().isoformat(),
-        "total_accounts": payload.get("count", len(rows)),
+        "total_accounts": len(rows),
+        "reported_total_accounts": expected_count,
         "accounts_with_credentials": credentialed_accounts,
         "accounts_without_credentials": len(rows) - credentialed_accounts,
         "certificates": dict(sorted(cert_counts.items())),
