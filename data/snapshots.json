@@ -1473,10 +1473,10 @@
     },
     {
       "date": "2026-10-13",
-      "total_accounts": 1007,
-      "reported_total_accounts": 1007,
-      "accounts_with_credentials": 343,
-      "accounts_without_credentials": 664,
+      "total_accounts": 1009,
+      "reported_total_accounts": 1009,
+      "accounts_with_credentials": 344,
+      "accounts_without_credentials": 665,
       "certificates": {
         "KLCP": 9,
         "OSAI": 2,
@@ -1495,7 +1495,7 @@
         "OSTH": 20,
         "OSWA": 30,
         "OSWE": 69,
-        "OSWP": 31
+        "OSWP": 32
       },
       "certificate_badges": {
         "KLCP": "https://static.offsec.com/media/lms/credentials/KLCP_Acclaim_Badge.svg",
