@@ -1707,8 +1707,8 @@
       "accounts_without_credentials": 668,
       "certificates": {
         "KLCP": 9,
-        "OSAI": 2,
-        "OSAI+": 2,
+        "OSAI": 3,
+        "OSAI+": 3,
         "OSCC-SEC": 20,
         "OSCC-SJD": 3,
         "OSCE3": 20,
