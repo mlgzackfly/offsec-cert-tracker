@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Fetch and aggregate the full OffSec leaderboard into a global snapshot."""
+import http.client
 import json
 import re
 import time
@@ -37,7 +38,7 @@ def fetch_page(offset):
                 raise
             delay = int(error.headers.get("Retry-After", 0) or 0) or min(2 ** attempt, 30)
             time.sleep(delay)
-        except (TimeoutError, urllib.error.URLError):
+        except (TimeoutError, urllib.error.URLError, http.client.HTTPException, json.JSONDecodeError, OSError):
             if attempt == RETRIES - 1:
                 raise
             time.sleep(min(2 ** attempt, 30))
