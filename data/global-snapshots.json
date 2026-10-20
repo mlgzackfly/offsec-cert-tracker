@@ -46523,9 +46523,9 @@
     },
     {
       "date": "2026-10-20",
-      "total_accounts": 85287,
-      "reported_total_accounts": 85554,
-      "accounts_with_credentials": 25047,
+      "total_accounts": 85290,
+      "reported_total_accounts": 85557,
+      "accounts_with_credentials": 25050,
       "accounts_without_credentials": 60240,
       "countries_with_accounts": 206,
       "countries_with_credentialed_accounts": 152,
@@ -46538,8 +46538,8 @@
         "OSCC-SJD": 55,
         "OSCE": 582,
         "OSCE3": 1141,
-        "OSCP": 20029,
-        "OSCP+": 7667,
+        "OSCP": 20032,
+        "OSCP+": 7670,
         "OSDA": 1313,
         "OSED": 1643,
         "OSEE": 153,
@@ -46938,7 +46938,7 @@
           }
         },
         "BR": {
-          "accounts": 1058,
+          "accounts": 1059,
           "accounts_with_credentials": 380,
           "certificates": {
             "KLCP": 6,
@@ -47093,7 +47093,7 @@
           }
         },
         "CN": {
-          "accounts": 1484,
+          "accounts": 1485,
           "accounts_with_credentials": 613,
           "certificates": {
             "KLCP": 12,
@@ -47877,7 +47877,7 @@
         },
         "JP": {
           "accounts": 1838,
-          "accounts_with_credentials": 648,
+          "accounts_with_credentials": 649,
           "certificates": {
             "KLCP": 15,
             "OSAI": 7,
@@ -47886,8 +47886,8 @@
             "OSCC-SJD": 9,
             "OSCE": 7,
             "OSCE3": 64,
-            "OSCP": 466,
-            "OSCP+": 233,
+            "OSCP": 467,
+            "OSCP+": 234,
             "OSDA": 67,
             "OSED": 88,
             "OSEE": 9,
@@ -48822,7 +48822,7 @@
           }
         },
         "SG": {
-          "accounts": 4265,
+          "accounts": 4266,
           "accounts_with_credentials": 1769,
           "certificates": {
             "KLCP": 65,
@@ -48952,7 +48952,7 @@
         },
         "TH": {
           "accounts": 623,
-          "accounts_with_credentials": 288,
+          "accounts_with_credentials": 289,
           "certificates": {
             "KLCP": 3,
             "OSAI": 1,
@@ -48960,8 +48960,8 @@
             "OSCC-SEC": 1,
             "OSCE": 7,
             "OSCE3": 12,
-            "OSCP": 267,
-            "OSCP+": 120,
+            "OSCP": 268,
+            "OSCP+": 121,
             "OSDA": 7,
             "OSED": 18,
             "OSEP": 41,
@@ -49119,7 +49119,7 @@
             "OSCC-SJD": 5,
             "OSCE": 137,
             "OSCE3": 162,
-            "OSCP": 3363,
+            "OSCP": 3364,
             "OSCP+": 989,
             "OSDA": 103,
             "OSED": 240,
@@ -49186,7 +49186,7 @@
         },
         "VN": {
           "accounts": 760,
-          "accounts_with_credentials": 387,
+          "accounts_with_credentials": 388,
           "certificates": {
             "KLCP": 3,
             "OSAI": 5,
@@ -49196,7 +49196,7 @@
             "OSCE": 2,
             "OSCE3": 13,
             "OSCP": 232,
-            "OSCP+": 102,
+            "OSCP+": 103,
             "OSDA": 7,
             "OSED": 18,
             "OSEP": 83,
