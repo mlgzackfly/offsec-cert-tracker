@@ -2727,10 +2727,10 @@
     },
     {
       "date": "2026-10-24",
-      "total_accounts": 1020,
-      "reported_total_accounts": 1020,
+      "total_accounts": 1021,
+      "reported_total_accounts": 1021,
       "accounts_with_credentials": 345,
-      "accounts_without_credentials": 675,
+      "accounts_without_credentials": 676,
       "certificates": {
         "KLCP": 9,
         "OSAI": 3,
