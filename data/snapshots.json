@@ -2841,10 +2841,10 @@
     },
     {
       "date": "2026-10-25",
-      "total_accounts": 1021,
-      "reported_total_accounts": 1021,
+      "total_accounts": 1022,
+      "reported_total_accounts": 1022,
       "accounts_with_credentials": 345,
-      "accounts_without_credentials": 676,
+      "accounts_without_credentials": 677,
       "certificates": {
         "KLCP": 9,
         "OSAI": 3,
